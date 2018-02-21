@@ -38,7 +38,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith( SpringRunner.class )
-@SpringBootTest( classes = { KafkaConfig.class, KafkaClientConfig.class, DomainEventSourceImpl.class, DomainEventSink.class },
+@SpringBootTest( classes = { KafkaConfig.class, KafkaClientConfig.class, DomainEventSink.class },
         webEnvironment= SpringBootTest.WebEnvironment.NONE,
         properties = {
             "spring.cloud.service-registry.auto-registration.enabled=false" //,
