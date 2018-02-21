@@ -1,0 +1,8 @@
+---
+spring:
+  profiles: kafka
+
+kafka:
+  bootstrap-servers: ${spring.embedded.kafka.brokers}
+  topic:
+    receiver: board-events

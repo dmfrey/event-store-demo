@@ -1,0 +1,34 @@
+debug: false
+
+server:
+  port: ${PORT:9080}
+
+spring:
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+
+---
+spring:
+  profiles: kafka
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: board-events
+          contentType: application/json
+          producer:
+            headerMode: raw # Outbound data has no embedded headers
+        input:
+          destination: board-events
+          group: command-board-events-group
+          consumer:
+            useNativeDecoding: true
+            headerMode: raw
+      kafka:
+        streams:
+          binder:
+            brokers: localhost
+            zkNodes: localhost

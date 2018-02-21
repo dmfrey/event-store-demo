@@ -1,0 +1,4 @@
+rootProject.name = 'event-store-demo'
+
+include ':command', ':query', ':event-store'
+

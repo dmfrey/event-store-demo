@@ -1,0 +1,9 @@
+debug: false
+
+server:
+  port: ${PORT:9082}
+
+spring:
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
