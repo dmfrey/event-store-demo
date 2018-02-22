@@ -13,6 +13,7 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Serialized;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -31,6 +32,7 @@ import java.util.Map;
 @Configuration
 //@EnableKafka
 //@EnableKafkaStreams
+//@EnableAutoConfiguration
 public class KafkaConfig {
 
     public static final String BOARD_EVENTS_SNAPSHOTS = "board-events-snapshots";

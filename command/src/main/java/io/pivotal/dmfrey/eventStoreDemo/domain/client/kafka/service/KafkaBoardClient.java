@@ -5,6 +5,7 @@ import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvent;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.errors.InvalidStateStoreException;
 import org.apache.kafka.streams.state.QueryableStoreType;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
@@ -53,14 +54,38 @@ public class KafkaBoardClient implements BoardClient {
     public Board find( final UUID boardUuid ) {
         log.debug( "find : enter" );
 
-        ReadOnlyKeyValueStore<String, Board> store = queryableStoreRegistry.getQueryableStoreType( BOARD_EVENTS_SNAPSHOTS, QueryableStoreTypes.<String, Board>keyValueStore() );
+//        while( true ) {
 
-        Board board = store.get( boardUuid.toString() );
-        board.flushChanges();
-        log.debug( "find : board=" + board.toString() );
+//            try {
 
-        log.debug( "find : exit" );
-        return board;
+                ReadOnlyKeyValueStore<String, Board> store = queryableStoreRegistry.getQueryableStoreType( BOARD_EVENTS_SNAPSHOTS, QueryableStoreTypes.<String, Board>keyValueStore() );
+
+                Board board = store.get( boardUuid.toString() );
+                if( null != board ) {
+
+                    board.flushChanges();
+                    log.debug("find : board=" + board.toString());
+
+                    log.debug("find : exit");
+                    return board;
+
+                } else {
+
+                    throw new IllegalArgumentException( "board[" + boardUuid.toString() + "] not found!" );
+                }
+
+//            } catch( InvalidStateStoreException e ) {
+//
+//                try {
+//                    Thread.sleep( 100 );
+//                } catch( InterruptedException e1 ) {
+//                    log.error( "find : thread interrupted", e1 );
+//                }
+//
+//            }
+
+//        }
+
     }
 
 }

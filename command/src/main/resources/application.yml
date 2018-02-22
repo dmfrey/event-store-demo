@@ -1,4 +1,4 @@
-debug: false
+debug: true
 
 server:
   port: ${PORT:9080}
@@ -17,6 +17,7 @@ spring:
     stream:
       bindings:
         output:
+          binder: kafka
           destination: board-events
           contentType: application/json
           producer:

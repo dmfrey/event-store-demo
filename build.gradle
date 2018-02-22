@@ -60,7 +60,8 @@ allprojects {
         // Spring Cloud dependencies
         compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
         compile('org.springframework.cloud:spring-cloud-starter-openfeign')
-        compile('org.springframework.cloud:spring-cloud-stream')
+//        compile('org.springframework.cloud:spring-cloud-stream')
+        compile('org.springframework.cloud:spring-cloud-stream-binder-kafka:2.0.0.BUILD-SNAPSHOT')
         compile('org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:2.0.0.BUILD-SNAPSHOT')
 
 
@@ -71,7 +72,7 @@ allprojects {
 
         // Test dependencies
         testCompile('org.springframework.boot:spring-boot-starter-test')
-        testCompile('org.springframework.cloud:spring-cloud-stream-test-support')
+//        testCompile('org.springframework.cloud:spring-cloud-stream-test-support')
         testCompile('org.springframework.cloud:spring-cloud-stream-binder-test')
         testCompile('org.springframework.kafka:spring-kafka-test')
 

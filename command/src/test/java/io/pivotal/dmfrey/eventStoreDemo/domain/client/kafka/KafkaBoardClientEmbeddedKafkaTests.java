@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.pivotal.dmfrey.eventStoreDemo.Application;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.BoardInitialized;
+import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvent;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvents;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import lombok.extern.slf4j.Slf4j;
@@ -66,8 +67,10 @@ public class KafkaBoardClientEmbeddedKafkaTests {
         SpringApplication app = new SpringApplication( Application.class );
         app.setWebApplicationType( WebApplicationType.NONE );
         ConfigurableApplicationContext context = app.run("--server.port=0",
-                "spring.cloud.service-registry.auto-registration.enabled=false",
+                "--spring.cloud.service-registry.auto-registration.enabled=false",
                 "--spring.jmx.enabled=false",
+//                "--spring.autoconfigure.exclude=org.springframework.cloud.stream.test.binder.TestSupportBinderAutoConfiguration",
+//                "--spring.cloud.stream.defaultBinder=kafka",
                 "--spring.cloud.stream.bindings.input.destination=board-events",
                 "--spring.cloud.stream.bindings.output.destination=board-events",
                 "--spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms=1000",
@@ -77,7 +80,7 @@ public class KafkaBoardClientEmbeddedKafkaTests {
                 "--spring.cloud.stream.bindings.input.consumer.headerMode=raw",
                 "--spring.cloud.stream.kafka.streams.binder.brokers=" + embeddedKafka.getBrokersAsString(),
                 "--spring.cloud.stream.kafka.streams.binder.zkNodes=" + embeddedKafka.getZookeeperConnectionString(),
-                "--spring.profiles.active=kafka");
+                "--spring.profiles.active=kafka" );
         try {
 
             receiveAndValidateBoard( context );
@@ -93,8 +96,8 @@ public class KafkaBoardClientEmbeddedKafkaTests {
     private void receiveAndValidateBoard( ConfigurableApplicationContext context ) throws Exception {
 
         Map<String, Object> senderProps = KafkaTestUtils.producerProps( embeddedKafka );
-        DefaultKafkaProducerFactory<Integer, String> pf = new DefaultKafkaProducerFactory<>( senderProps );
-        KafkaTemplate<Integer, String> template = new KafkaTemplate<>( pf, true );
+        DefaultKafkaProducerFactory<String, DomainEvent> pf = new DefaultKafkaProducerFactory<>( senderProps );
+        KafkaTemplate<String, DomainEvent> template = new KafkaTemplate<>( pf, true );
         template.setDefaultTopic( RECEIVER_TOPIC );
 
         ObjectMapper mapper = context.getBean( ObjectMapper.class );
@@ -103,7 +106,7 @@ public class KafkaBoardClientEmbeddedKafkaTests {
         UUID boardUuid = UUID.randomUUID();
         BoardInitialized boardInitialized = createTestBoardInitializedEvent( boardUuid );
         String event = mapper.writeValueAsString( boardInitialized );
-        template.sendDefault( event );
+        template.sendDefault( boardInitialized );
 
         DomainEvents domainEvents = new DomainEvents();
         domainEvents.setBoardUuid( boardUuid );

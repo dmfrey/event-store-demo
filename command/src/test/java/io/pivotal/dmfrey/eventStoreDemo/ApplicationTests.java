@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith( SpringRunner.class )
 @SpringBootTest( properties = {
-        "spring.cloud.service-registry.auto-registration.enabled=false"
+        "--spring.cloud.service-registry.auto-registration.enabled=false"
 })
 @Import( UnitTestConfig.class )
 public class ApplicationTests {
