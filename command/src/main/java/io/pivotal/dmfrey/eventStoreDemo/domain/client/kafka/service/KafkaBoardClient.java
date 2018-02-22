@@ -64,9 +64,9 @@ public class KafkaBoardClient implements BoardClient {
                 if( null != board ) {
 
                     board.flushChanges();
-                    log.debug("find : board=" + board.toString());
+                    log.debug( "find : board=" + board.toString() );
 
-                    log.debug("find : exit");
+                    log.debug( "find : exit" );
                     return board;
 
                 } else {

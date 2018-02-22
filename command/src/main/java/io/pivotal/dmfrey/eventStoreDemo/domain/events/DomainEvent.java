@@ -33,7 +33,7 @@ public abstract class DomainEvent {
     @JsonIgnore
     private final Instant when;
 
-    DomainEvent(final UUID boardUuid, final Instant when) {
+    DomainEvent( final UUID boardUuid, final Instant when ) {
 
         this.boardUuid = boardUuid;
         this.when = when;

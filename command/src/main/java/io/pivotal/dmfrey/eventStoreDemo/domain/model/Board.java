@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.*;
@@ -19,6 +20,7 @@ import static io.vavr.collection.Stream.ofAll;
 import static lombok.AccessLevel.NONE;
 
 @Data
+@Slf4j
 public class Board {
 
     @Setter( NONE )
@@ -44,6 +46,7 @@ public class Board {
     }
 
     private Board boardInitialized( final BoardInitialized event ) {
+        log.debug( "boardInitialized : event=" + event );
 
         flushChanges();
         this.boardUuid = event.getBoardUuid();
@@ -59,6 +62,7 @@ public class Board {
     }
 
     private Board boardRenamed( final BoardRenamed event ) {
+        log.debug( "boardRenamed : event=" + event );
 
         this.name = event.getName();
         this.changes.add( event );
@@ -78,6 +82,7 @@ public class Board {
     }
 
     private Board storyAdded( final StoryAdded event ) {
+        log.debug( "storyAdded : event=" + event );
 
         this.stories.put( event.getStoryUuid(), event.getStory() );
         this.changes.add( event );
@@ -92,6 +97,7 @@ public class Board {
     }
 
     private Board storyUpdated( final StoryUpdated event ) {
+        log.debug( "storyUpdated : event=" + event );
 
         this.stories.replace( event.getStoryUuid(), event.getStory() );
         this.changes.add( event );
@@ -106,6 +112,7 @@ public class Board {
     }
 
     private Board storyDeleted( final StoryDeleted event ) {
+        log.debug( "storyDeleted : event=" + event );
 
         this.stories.remove( event.getStoryUuid() );
         this.changes.add( event );
