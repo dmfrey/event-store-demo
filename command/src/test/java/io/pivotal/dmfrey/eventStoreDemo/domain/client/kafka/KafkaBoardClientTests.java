@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
 @ActiveProfiles( "kafka" )
 @DirtiesContext
 @Slf4j
-@Ignore
+//@Ignore
 public class KafkaBoardClientTests {
 
     @Autowired
@@ -59,11 +59,11 @@ public class KafkaBoardClientTests {
 
 //        BlockingQueue<Message<?>> messages = collector.forChannel( source.output() );
 //
-//        UUID boardUuid = UUID.randomUUID();
-//        Board board = createTestBoard( boardUuid );
-//        String event = mapper.writeValueAsString( board.changes().get( 0 ) );
-//
-//        this.boardClient.save( board );
+        UUID boardUuid = UUID.randomUUID();
+        Board board = createTestBoard( boardUuid );
+        String event = mapper.writeValueAsString( board.changes().get( 0 ) );
+
+        this.boardClient.save( board );
 //
 //        assertThat( messages, receivesPayloadThat( is( event ) ) );
 

@@ -8,7 +8,6 @@ import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -23,17 +22,20 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.*;
+import static io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaClientConfig.BOARD_EVENTS_SNAPSHOTS;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 @Slf4j
 public class KafkaBoardClientEmbeddedKafkaTests {
 
     private static String RECEIVER_TOPIC = "board-events";
 
     @ClassRule
-    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded( 1, true, RECEIVER_TOPIC );
+    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded( 1, true, RECEIVER_TOPIC, BOARD_EVENTS_SNAPSHOTS );
 
     private static Consumer<String, String> consumer;
 
@@ -70,13 +72,9 @@ public class KafkaBoardClientEmbeddedKafkaTests {
         ConfigurableApplicationContext context = app.run("--server.port=0",
                 "--spring.cloud.service-registry.auto-registration.enabled=false",
                 "--spring.jmx.enabled=false",
-//                "--spring.autoconfigure.exclude=org.springframework.cloud.stream.test.binder.TestSupportBinderAutoConfiguration",
-//                "--spring.cloud.stream.defaultBinder=kafka",
                 "--spring.cloud.stream.bindings.input.destination=board-events",
                 "--spring.cloud.stream.bindings.output.destination=board-events",
                 "--spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms=1000",
-//                "--spring.cloud.stream.kafka.streams.binder.configuration.default.key.serde=org.apache.kafka.common.serialization.Serdes$StringSerde",
-//                "--spring.cloud.stream.kafka.streams.binder.configuration.default.value.serde=org.apache.kafka.common.serialization.Serdes$StringSerde",
                 "--spring.cloud.stream.bindings.output.producer.headerMode=raw",
                 "--spring.cloud.stream.bindings.input.consumer.headerMode=raw",
                 "--spring.cloud.stream.kafka.streams.binder.brokers=" + embeddedKafka.getBrokersAsString(),
@@ -111,15 +109,14 @@ public class KafkaBoardClientEmbeddedKafkaTests {
         String event = mapper.writeValueAsString( boardInitialized );
         template.sendDefault( event );
 
-//        ConsumerRecord<String, String> cr = KafkaTestUtils.getSingleRecord( consumer, RECEIVER_TOPIC );
-//        assertThat( cr.value(), is( equalTo( event ) ) );
+        Thread.sleep( 1000 );
 
         Board board = boardClient.find( boardUuid );
         assertThat( board, is( notNullValue() ) );
-//        assertThat( board.getBoardUuid(), is( equalTo( boardUuid ) ) );
-//        assertThat( board.getName(), is( equalTo( "New Board" ) ) );
-//        assertThat( board.getStories().isEmpty(), is( equalTo( true ) ) );
-//        assertThat( board.changes(), hasSize( 0 ) );
+        assertThat( board.getBoardUuid(), is( equalTo( boardUuid ) ) );
+        assertThat( board.getName(), is( equalTo( "New Board" ) ) );
+        assertThat( board.getStories().isEmpty(), is( equalTo( true ) ) );
+        assertThat( board.changes(), hasSize( 0 ) );
 
     }
 

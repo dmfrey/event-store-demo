@@ -6,3 +6,19 @@ kafka:
   bootstrap-servers: ${spring.embedded.kafka.brokers}
   topic:
     receiver: board-events
+
+#spring:
+#  cloud:
+#    stream:
+#      bindings:
+#        input:
+#          destination: board-events
+#          group: command-board-events-group
+#          consumer:
+#            useNativeDecoding: true
+#            headerMode: raw
+#      kafka:
+#        streams:
+#          binder:
+#            brokers: localhost
+#            zkNodes: localhost

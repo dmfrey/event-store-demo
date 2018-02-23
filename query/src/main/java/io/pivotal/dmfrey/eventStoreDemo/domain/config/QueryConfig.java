@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CommandConfig {
+public class QueryConfig {
 
     @Bean
     public BoardService boardService( final BoardClient boardClient ) {

@@ -1,5 +1,8 @@
 debug: false
 
+logging.level:
+  io.pivotal.dmfrey: DEBUG
+
 server:
   port: ${PORT:9080}
 
@@ -10,6 +13,26 @@ spring:
 
 logger.level:
   io.pivotal.dmfrey.eventStoreDemo: DEBUG
+
+---
+spring:
+  profiles: event-store
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: board-events
+          group: command-board-events-group
+          consumer:
+            useNativeDecoding: true
+            headerMode: raw
+      kafka:
+        streams:
+          binder:
+            brokers: localhost
+            zkNodes: localhost
 
 ---
 spring:

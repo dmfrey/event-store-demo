@@ -28,7 +28,7 @@ public class EventStoreBoardClient implements BoardClient {
         log.debug( "find : enter" );
 
         DomainEvents domainEvents = this.eventStoreClient.getDomainEventsForBoardUuid( boardUuid );
-        if( domainEvents.getDomainEvents().isEmpty() ) {
+        if( null == domainEvents || null == domainEvents.getDomainEvents() || domainEvents.getDomainEvents().isEmpty() ) {
 
             log.warn( "find : exit, target[" + boardUuid.toString() + "] not found" );
             throw new IllegalArgumentException( "board[" + boardUuid.toString() + "] not found" );

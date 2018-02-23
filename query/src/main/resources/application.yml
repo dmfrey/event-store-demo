@@ -1,5 +1,8 @@
 debug: false
 
+logging.level:
+  io.pivotal.dmfrey: DEBUG
+
 server:
   port: ${PORT:9081}
 
@@ -7,6 +10,20 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: false
+
+---
+spring:
+  profiles: event-store
+
+  cloud:
+    stream:
+      bindings:
+        input:
+          binder: rabbit
+          destination: board-event-notifications
+          contentType: application/json
+          consumer:
+            headerMode: raw # Outbound data has no embedded headers
 
 ---
 spring:

@@ -1,9 +1,28 @@
 debug: false
 
+logging.level:
+  io.pivotal.dmfrey: DEBUG
+
+management.endpoints.web.expose: health, info, env, metrics
+
 server:
   port: ${PORT:9082}
 
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
   jackson:
     serialization:
       write_dates_as_timestamps: false
+
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: board-event-notifications
+          contentType: application/json
+          producer:
+            headerMode: raw # Outbound data has no embedded headers

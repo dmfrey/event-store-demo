@@ -18,12 +18,6 @@ public class UnitTestConfig {
         return new BoardClient() {
 
             @Override
-            public void save( Board board ) {
-
-                throw new UnsupportedOperationException( "client call not implemented yet" );
-            }
-
-            @Override
             public Board find( UUID boardUuid ) {
 
                 throw new UnsupportedOperationException( "client call not implemented yet" );

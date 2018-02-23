@@ -26,7 +26,7 @@ import static lombok.AccessLevel.NONE;
 public class Board {
 
     private UUID boardUuid;
-    private String name;
+    private String name = "New Board";
     private Map<UUID, Story> stories = new HashMap<>();
 
     public Board() { }
