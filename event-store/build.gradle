@@ -13,5 +13,10 @@ dependencies {
     // Third-party dependencies
     runtime('com.h2database:h2')
 
+
+    // Test dependencies
+    compile('org.springframework.cloud:spring-cloud-stream-test-support')
+
+
 }
 
