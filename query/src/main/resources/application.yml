@@ -7,3 +7,27 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: false
+
+---
+spring:
+  profiles: kafka
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: board-events
+          group: query-board-events-group
+          consumer:
+            useNativeDecoding: true
+            headerMode: raw
+      kafka:
+        streams:
+          binder:
+            brokers: localhost
+            zkNodes: localhost
+
+logger.level:
+  org.apache.kafka: DEBUG
+  org.apache.kafka.clients: ERROR
