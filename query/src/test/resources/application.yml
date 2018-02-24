@@ -1,5 +1,14 @@
 ---
 spring:
+  profiles: event-store
+
+  cloud:
+    stream:
+      default-binder: rabbit
+
+
+---
+spring:
   profiles: kafka
 
 kafka:
