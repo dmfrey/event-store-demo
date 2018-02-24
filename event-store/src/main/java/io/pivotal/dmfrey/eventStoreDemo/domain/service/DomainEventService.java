@@ -65,7 +65,7 @@ public class DomainEventService {
         }
 
         log.debug( "processDomainEvent : calling publisher.sendNotification( event )" );
-        publisher.sendNotification( event );
+        this.publisher.sendNotification( event );
 
         log.debug( "processDomainEvent : exit" );
     }
@@ -98,9 +98,7 @@ public class DomainEventService {
 
         this.domainEventsRepository.findById( boardUuid )
                 .ifPresent( found -> {
-                    log.debug( "processBoardEvent : a DomainEventsEntity[{}] was found for boardUuid[{}]. ",
-                            found,
-                            boardUuid);
+                    log.debug( "processBoardEvent : a DomainEventsEntity[{}] was found for boardUuid[{}]. ", found, boardUuid );
 
                     DomainEventEntity domainEventEntity = new DomainEventEntity();
                     domainEventEntity.setId( UUID.randomUUID().toString() );
