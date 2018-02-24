@@ -1,0 +1,131 @@
+package io.pivotal.dmfrey.eventStoreDemo.endpoint;
+
+import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.net.URI;
+import java.util.UUID;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@RunWith( SpringRunner.class )
+@WebMvcTest( ApiController.class )
+public class ApiControllerTests {
+
+    private static final String BOARD_JSON = "{\"name\":\"My Board\",\"backlog\":[{\"storyUuid\":\"242500df-373e-4e70-90bc-3c8cd54c81d8\",\"name\":\"My Story 1\"}]}";
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockBean
+    BoardService service;
+
+    @Test
+    public void testCreateBoard() throws Exception {
+
+        UUID boardUuid = UUID.randomUUID();
+        when( this.service.createBoard() ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + boardUuid.toString() ) ).build() );
+
+        this.mockMvc.perform( post( "/boards" ) )
+                .andDo( print() )
+                .andExpect( status().isCreated() )
+                .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() ) ) ) );
+
+        verify( this.service, times( 1 ) ).createBoard();
+
+    }
+
+    @Test
+    public void testRenameBoard() throws Exception {
+
+        UUID boardUuid = UUID.randomUUID();
+        when( this.service.renameBoard( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
+
+        this.mockMvc.perform( patch( "/boards/{boardUuid}", boardUuid ).param( "name", "Test Board" ) )
+                .andDo( print() )
+                .andExpect( status().isAccepted() );;
+
+        verify( this.service, times( 1 ) ).renameBoard( any( UUID.class ), anyString() );
+
+    }
+
+    @Test
+    public void testCreateStoryOnBoard() throws Exception {
+
+        UUID boardUuid = UUID.randomUUID();
+        UUID storyUuid = UUID.randomUUID();
+        when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ).build() );
+
+        this.mockMvc.perform( post( "/boards/{boardUuid}/stories", boardUuid ).param( "name", "Test Story" ) )
+                .andDo( print() )
+                .andExpect( status().isCreated() )
+                .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ) ) );
+
+        verify( this.service, times( 1 ) ).addStory( any( UUID.class ), anyString() );
+
+    }
+
+    @Test
+    public void testUpdateStoryOnBoard() throws Exception {
+
+        UUID boardUuid = UUID.randomUUID();
+        UUID storyUuid = UUID.randomUUID();
+        when( this.service.updateStory( any( UUID.class ), any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
+
+        this.mockMvc.perform( put( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ).param( "name", "Test Story Updated" ) )
+                .andDo( print() )
+                .andExpect( status().isAccepted() );
+
+        verify( this.service, times( 1 ) ).updateStory( any( UUID.class ), any( UUID.class ), anyString() );
+
+    }
+
+    @Test
+    public void testDeleteStoryOnBoard() throws Exception {
+
+        UUID boardUuid = UUID.randomUUID();
+        UUID storyUuid = UUID.randomUUID();
+        when( this.service.deleteStory( any( UUID.class ), any( UUID.class ) ) ).thenReturn( ResponseEntity.accepted().build() );
+
+        this.mockMvc.perform( delete( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ) )
+                .andDo( print() )
+                .andExpect( status().isAccepted() );
+
+        verify( this.service, times( 1 ) ).deleteStory( any( UUID.class ), any( UUID.class ) );
+
+    }
+
+    @Test
+    public void testBoard() throws Exception {
+
+        when( this.service.board( any( UUID.class ) ) ).thenReturn( ResponseEntity.ok( BOARD_JSON ) );
+
+        this.mockMvc.perform( get( "/boards/{boardUuid}", UUID.randomUUID() ) )
+                .andExpect( status().isOk() )
+                .andDo( print() )
+                .andExpect( jsonPath( "$.name", is( equalTo( "My Board" ) ) ) )
+                .andExpect( jsonPath( "$.backlog" ).isArray() );
+
+        verify( this.service, times( 1 ) ).board( any( UUID.class ) );
+
+    }
+
+}

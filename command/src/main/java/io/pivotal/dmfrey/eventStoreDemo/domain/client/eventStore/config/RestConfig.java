@@ -35,29 +35,4 @@ public class RestConfig {
 
     }
 
-//    @Bean
-//    public HystrixFallbackEventStoreClient hystrixFallbackEventStoreClient() {
-//
-//        return new HystrixFallbackEventStoreClient();
-//    }
-
-//    @Component
-//    static class HystrixFallbackEventStoreClient implements EventStoreClient {
-//
-//        @Override
-//        public ResponseEntity addNewDomainEvent( final DomainEvent event ) {
-//
-//            return ResponseEntity
-//                    .status( INTERNAL_SERVER_ERROR )
-//                    .build();
-//        }
-//
-//        @Override
-//        public DomainEvents getDomainEventsForBoardUuid( final UUID boardUuid) {
-//
-//            return new DomainEvents();
-//        }
-//
-//    }
-
 }

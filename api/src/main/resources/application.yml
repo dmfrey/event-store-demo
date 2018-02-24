@@ -1,0 +1,12 @@
+debug: false
+
+logger.level:
+  io.pivotal.dmfrey: DEBUG
+
+server:
+  port: ${PORT:8765}
+
+spring:
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
