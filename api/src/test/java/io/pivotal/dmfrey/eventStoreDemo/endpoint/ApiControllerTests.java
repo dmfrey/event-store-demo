@@ -4,10 +4,12 @@ import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,18 +18,20 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith( SpringRunner.class )
 @WebMvcTest( ApiController.class )
+@AutoConfigureRestDocs( outputDir = "build/generated-snippets", uriPort = 8765 )
 public class ApiControllerTests {
 
     private static final String BOARD_JSON = "{\"name\":\"My Board\",\"backlog\":[{\"storyUuid\":\"242500df-373e-4e70-90bc-3c8cd54c81d8\",\"name\":\"My Story 1\"}]}";
@@ -47,7 +51,8 @@ public class ApiControllerTests {
         this.mockMvc.perform( post( "/boards" ) )
                 .andDo( print() )
                 .andExpect( status().isCreated() )
-                .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() ) ) ) );
+                .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() ) ) ) )
+                .andDo( document("create-board" ) );
 
         verify( this.service, times( 1 ) ).createBoard();
 
@@ -61,7 +66,15 @@ public class ApiControllerTests {
 
         this.mockMvc.perform( patch( "/boards/{boardUuid}", boardUuid ).param( "name", "Test Board" ) )
                 .andDo( print() )
-                .andExpect( status().isAccepted() );;
+                .andExpect( status().isAccepted() )
+                .andDo( document("rename-board",
+                        pathParameters(
+                                parameterWithName( "boardUuid" ).description( "The unique id of the board" )
+                        ),
+                        requestParameters(
+                                parameterWithName( "name" ).description( "The new name of the Board" )
+                        )
+                ));
 
         verify( this.service, times( 1 ) ).renameBoard( any( UUID.class ), anyString() );
 
@@ -77,7 +90,15 @@ public class ApiControllerTests {
         this.mockMvc.perform( post( "/boards/{boardUuid}/stories", boardUuid ).param( "name", "Test Story" ) )
                 .andDo( print() )
                 .andExpect( status().isCreated() )
-                .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ) ) );
+                .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ) ) )
+                .andDo( document("add-story",
+                        pathParameters(
+                                parameterWithName( "boardUuid" ).description( "The unique id of the board" )
+                        ),
+                        requestParameters(
+                                parameterWithName( "name" ).description( "The new story to add to the Board" )
+                        )
+                ));
 
         verify( this.service, times( 1 ) ).addStory( any( UUID.class ), anyString() );
 
@@ -92,7 +113,17 @@ public class ApiControllerTests {
 
         this.mockMvc.perform( put( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ).param( "name", "Test Story Updated" ) )
                 .andDo( print() )
-                .andExpect( status().isAccepted() );
+                .andExpect( status().isAccepted() )
+                .andDo( document("update-story",
+                        pathParameters(
+                                parameterWithName( "boardUuid" ).description( "The unique id of the board" ),
+                                parameterWithName( "storyUuid" ).description( "The unique id of the story on the board" )
+                        ),
+                        requestParameters(
+                                parameterWithName( "name" ).description( "The new name of the Board" )
+                        )
+                ));
+
 
         verify( this.service, times( 1 ) ).updateStory( any( UUID.class ), any( UUID.class ), anyString() );
 
@@ -105,9 +136,15 @@ public class ApiControllerTests {
         UUID storyUuid = UUID.randomUUID();
         when( this.service.deleteStory( any( UUID.class ), any( UUID.class ) ) ).thenReturn( ResponseEntity.accepted().build() );
 
-        this.mockMvc.perform( delete( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ) )
+        this.mockMvc.perform( RestDocumentationRequestBuilders.delete( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ) )
                 .andDo( print() )
-                .andExpect( status().isAccepted() );
+                .andExpect( status().isAccepted() )
+                .andDo( document("delete-story",
+                        pathParameters(
+                                parameterWithName( "boardUuid" ).description( "The unique id of the board" ),
+                                parameterWithName( "storyUuid" ).description( "The unique id of the story on the board to be deleted" )
+                        )
+                ));
 
         verify( this.service, times( 1 ) ).deleteStory( any( UUID.class ), any( UUID.class ) );
 
@@ -122,7 +159,13 @@ public class ApiControllerTests {
                 .andExpect( status().isOk() )
                 .andDo( print() )
                 .andExpect( jsonPath( "$.name", is( equalTo( "My Board" ) ) ) )
-                .andExpect( jsonPath( "$.backlog" ).isArray() );
+                .andExpect( jsonPath( "$.backlog" ).isArray() )
+                .andDo( document("get-board",
+                        pathParameters(
+                                parameterWithName( "boardUuid" ).description( "The unique id of the board" )
+                        )
+                ));
+
 
         verify( this.service, times( 1 ) ).board( any( UUID.class ) );
 

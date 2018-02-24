@@ -1,7 +1,37 @@
 
+plugins {
+    id "org.asciidoctor.convert" version "1.5.6"
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
 dependencies {
+
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     // Spring Cloud dependencies
     compile('org.springframework.cloud:spring-cloud-starter-openfeign')
 
+    // Test dependencies
+    testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+jar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
