@@ -23,7 +23,7 @@ The API application is a common gateway layer between Command and Query applicat
 
 The applications is a Spring Boot 2 application and is simply a proxy service to the lower apps.
 
-API Documentation is produced by Spring RestDocs and is available at [docs](http://localhost:8765/docs).
+API Documentation is produced by Spring RestDocs and is available at [docs](http://localhost:8765/docs/index.html).
 
 ````
 $ ./gradlew :api:bootRun
@@ -33,7 +33,7 @@ The demo application currently has 2 flavors: `kafka` and `event-store`. Each is
 
 #### Kafka Architecture
 
-TODO: Define the Command and Query applications in the kafka profile
+The Command application will accept HTTP verbs POST, PATCH, PUT and DELETE through the API application or directly.  See below for example curl commands.  The Query application will accept HTTP GET requests for views of a `Board`.
 
 ![kafka architecture][kafka-architecture]
 
