@@ -151,6 +151,10 @@ $ curl 'http://localhost:8765/boards/4b1d138a-f4ac-4b64-8579-9dda99373ad9/storie
 $ curl 'http://localhost:8765/boards/5701b111-7a76-475d-90e1-08e5aa4366a9/stories/a25c1d6e-085a-4201-b241-396948d1bf3f' -i -X DELETE
 ````
 
+## Source Code
+
+The code for the application can be found on [GitHub](https://github.com/dmfrey/event-store-demo).
+
 
 [kafka-architecture]: images/Event%20Source%20Demo%20-%20Kafka.png "Kafka Architecture"
 [event-store-architecture]: images/Event%20Source%20Demo%20-%20Event%20Store.png "Event Store Architecture"
