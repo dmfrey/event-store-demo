@@ -54,10 +54,9 @@ The API application is a common gateway layer between Command and Query applicat
 
 The applications is a Spring Boot 2 application and is simply a proxy service to the lower apps.
 
-API Documentation is produced by Spring RestDocs and is available at [docs](http://localhost:8765/docs/index.html).
-
+API Documentation is produced by Spring RestDocs and is available at [docs](http://localhost:8765/docs/index.html). In order to see this page, you must run the Spring Boot fat jar.
 ````
-$ ./gradlew :api:bootRun
+$ java -jar api/build/libs/api-0.0.1-SNAPSHOT.jar
 ````
 
 The demo application currently has 2 flavors: `kafka` and `event-store`. Each is described in further detail below.

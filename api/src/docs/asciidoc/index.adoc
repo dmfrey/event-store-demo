@@ -3,103 +3,103 @@
 
 == POST /boards - Create New Board
 
-==== Request
+=== Request
 .curl
 include::{snippets}/create-board/curl-request.adoc[]
 
 .http
 include::{snippets}/create-board/http-request.adoc[]
 
-==== Success Responses
+=== Success Responses
 .http
 include::{snippets}/create-board/http-response.adoc[]
 
 
 == GET /boards/{boardUuid} - Get Board
 
-==== Path Variables
+=== Path Variables
 .http
 include::{snippets}/get-board/path-parameters.adoc[]
 
-==== Request
+=== Request
 .curl
 include::{snippets}/get-board/curl-request.adoc[]
 
 .http
 include::{snippets}/get-board/http-request.adoc[]
 
-==== Success Responses
+=== Success Responses
 .http
 include::{snippets}/get-board/http-response.adoc[]
 
 
 == PATCH /boards/{boardUuid} - Rename Board
 
-==== Path Variables
+=== Path Variables
 .http
 include::{snippets}/rename-board/path-parameters.adoc[]
 
-==== Request
+=== Request
 .curl
 include::{snippets}/rename-board/curl-request.adoc[]
 
 .http
 include::{snippets}/rename-board/http-request.adoc[]
 
-==== Success Responses
+=== Success Responses
 .http
 include::{snippets}/rename-board/http-response.adoc[]
 
 
 == POST /boards/{boardUuid}/stories - Add Story
 
-==== Path Variables
+=== Path Variables
 .http
 include::{snippets}/add-story/path-parameters.adoc[]
 
-==== Request
+=== Request
 .curl
 include::{snippets}/add-story/curl-request.adoc[]
 
 .http
 include::{snippets}/add-story/http-request.adoc[]
 
-==== Success Responses
+=== Success Responses
 .http
 include::{snippets}/add-story/http-response.adoc[]
 
 
 == PUT /boards/{boardUuid}/stories/{storyUuid} - Update Story
 
-==== Path Variables
+=== Path Variables
 .http
 include::{snippets}/update-story/path-parameters.adoc[]
 
-==== Request
+=== Request
 .curl
 include::{snippets}/update-story/curl-request.adoc[]
 
 .http
 include::{snippets}/update-story/http-request.adoc[]
 
-==== Success Responses
+=== Success Responses
 .http
 include::{snippets}/update-story/http-response.adoc[]
 
 
 == DELETE /boards/{boardUuid}/stories/{storyUuid} - Delete Story
 
-==== Path Variables
+=== Path Variables
 .http
 include::{snippets}/delete-story/path-parameters.adoc[]
 
-==== Request
+=== Request
 .curl
 include::{snippets}/delete-story/curl-request.adoc[]
 
 .http
 include::{snippets}/delete-story/http-request.adoc[]
 
-==== Success Responses
+=== Success Responses
 .http
 include::{snippets}/delete-story/http-response.adoc[]
