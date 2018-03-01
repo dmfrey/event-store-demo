@@ -8,6 +8,13 @@ This application was unique in that we implemented the backend with Apache Kafka
 
 This application is a simple Kanban. It only allows for minimal board and story management.
 
+### Build the Demo App
+
+All of the applications are sub projects of a parent Gradle build script.  Building the apps is easy with the included Gradle Wrapper.
+````
+$ ./gradlew build
+````
+
 ### Setup
 
 The application is broken down into a series of microservices. A Eureka Discovery Server is needed to run the demo. The Spring Cloud cli is easy to setup and use and provides Eureka out of the box.
