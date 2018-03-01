@@ -46,9 +46,9 @@ Start Eureka
 $ spring cloud eureka
 ````
 
-### Architecture
+## Architecture
 
-#### API
+### API
 
 The API application is a common gateway layer between Command and Query applications. The lower applications are separated in typical CQRS fashion.
 
@@ -62,7 +62,7 @@ $ ./gradlew :api:bootRun
 
 The demo application currently has 2 flavors: `kafka` and `event-store`. Each is described in further detail below.
 
-#### Kafka Architecture
+### Kafka Architecture
 
 The Command application will accept HTTP verbs POST, PATCH, PUT and DELETE through the API application or directly.  See below for example curl commands.  The Query application will accept HTTP GET requests for views of a `Board`.
 
@@ -97,7 +97,7 @@ $ kafka-console-consumer --bootstrap-server localhost:9092 --topic command-board
 $ kafka-console-consumer --bootstrap-server localhost:9092 --topic query-board-events-group-board-events-snapshots-changelog --from-beginning
 ````
 
-#### Event Store Architecture
+### Event Store Architecture
 
 The Command application will accept HTTP verbs POST, PATCH, PUT and DELETE through the API application or directly.  See below for example curl commands.  The Query application will accept HTTP GET requests for views of a `Board`.
 
@@ -120,7 +120,37 @@ $ ./gradlew :event-store:bootRun
 ````
 
 Monitor the database
-Go to the [h2 console](http://localhost:9082/h2-console). Connect to the database `jdbc:h2:mem:testdb`.
+Go to the [h2 console](http://localhost:9082/h2-console). Connect to the database `jdbc:h2:mem:testdb`. There are two tables of interest: `domain_events` and `domain_event`.
+
+## Using the API
+
+All of the implemented capabilities are available in the API Documentation at [docs](http://localhost:8765/docs/index.html). Below are some simple `curl` commands to interact with the API. These can also be ported to a rest client, such as Postman.
+
+### Create a new Board
+
+````
+$ curl 'http://localhost:8765/boards' -i -X POST
+````
+
+### Rename an existing Board
+````
+$ curl 'http://localhost:8765/boards/00000000-0000-0000-0000-000000000000' -i -X PATCH
+````
+
+### Add a Story to an existing Board
+````
+$ curl 'http://localhost:8765/boards/c882c8f3-1b1c-4ab3-9086-1470b3ba0cb1/stories' -i -X POST -d 'name=Test+Story'
+````
+
+### Update an existing Story on an existing Board
+````
+$ curl 'http://localhost:8765/boards/4b1d138a-f4ac-4b64-8579-9dda99373ad9/stories/68e1da93-7993-499e-94a6-a0e6f79987ff' -i -X PUT -d 'name=Test+Story+Updated'
+````
+
+### Delete an existing Story on an existing Board
+````
+$ curl 'http://localhost:8765/boards/5701b111-7a76-475d-90e1-08e5aa4366a9/stories/a25c1d6e-085a-4201-b241-396948d1bf3f' -i -X DELETE
+````
 
 
 [kafka-architecture]: images/Event%20Source%20Demo%20-%20Kafka.png "Kafka Architecture"
