@@ -138,17 +138,17 @@ $ curl 'http://localhost:8765/boards/00000000-0000-0000-0000-000000000000' -i -X
 
 ### Add a Story to an existing Board
 ````
-$ curl 'http://localhost:8765/boards/c882c8f3-1b1c-4ab3-9086-1470b3ba0cb1/stories' -i -X POST -d 'name=Test+Story'
+$ curl 'http://localhost:8765/boards/00000000-0000-0000-0000-000000000000/stories' -i -X POST -d 'name=Test+Story'
 ````
 
 ### Update an existing Story on an existing Board
 ````
-$ curl 'http://localhost:8765/boards/4b1d138a-f4ac-4b64-8579-9dda99373ad9/stories/68e1da93-7993-499e-94a6-a0e6f79987ff' -i -X PUT -d 'name=Test+Story+Updated'
+$ curl 'http://localhost:8765/boards/00000000-0000-0000-0000-000000000000/stories/00000000-0000-0000-0000-000000000000' -i -X PUT -d 'name=Test+Story+Updated'
 ````
 
 ### Delete an existing Story on an existing Board
 ````
-$ curl 'http://localhost:8765/boards/5701b111-7a76-475d-90e1-08e5aa4366a9/stories/a25c1d6e-085a-4201-b241-396948d1bf3f' -i -X DELETE
+$ curl 'http://localhost:8765/boards/00000000-0000-0000-0000-000000000000/stories/00000000-0000-0000-0000-000000000000' -i -X DELETE
 ````
 
 ## Source Code
