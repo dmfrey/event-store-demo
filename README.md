@@ -11,6 +11,30 @@ This application is a simple Kanban. It only allows for minimal board and story 
 ### Setup
 
 The application is broken down into a series of microservices. A Eureka Discovery Server is needed to run the demo. The Spring Cloud cli is easy to setup and use and provides Eureka out of the box.
+
+Install the Spring Boot cli
+
+Mac OS - Homebrew
+````
+$ brew tap pivotal/tap
+$ brew install springboot
+$ spring --version
+````
+
+Linux - SDKMan
+````
+$ curl -s "https://get.sdkman.io" | bash
+$ source "$HOME/.sdkman/bin/sdkman-init.sh"
+$ sdk install springboot
+$ spring --version
+````
+
+Install the Spring Cloud cli extension
+````
+$ spring install org.springframework.cloud:spring-cloud-cli:1.4.0.RELEASE
+````
+
+Start Eureka
 ````
 $ spring cloud eureka
 ````
@@ -68,9 +92,18 @@ $ kafka-console-consumer --bootstrap-server localhost:9092 --topic query-board-e
 
 #### Event Store Architecture
 
-TODO: Define the Command and Query applications in the event-store profile
+The Command application will accept HTTP verbs POST, PATCH, PUT and DELETE through the API application or directly.  See below for example curl commands.  The Query application will accept HTTP GET requests for views of a `Board`.
+
+As the Command application accepts new requests, they are validated and turned into `DomainEvent`s. Each `DomainEvent` is posted to the Event Store application. The Event Store will broadcast the `Domain Event` to the Event Notification Channel on RabbitMQ.
+
+Once the `DomainEvent`s are in the Event Store, the command and query applications can each perform an HTTP GET to get the `Domain Event`s for a `Board` which is used to build the aggregate view respective to each application.
+
+The Query application will also respond to the `Domain Event` notification from the rabbitmq channel by removing the changed `Board` from the local cache.
 
 ![event store architecture][event-store-architecture]
+
+Start RabbitMQ
+This is platform dependent.  For example, RabbitMQ is available in Homebrew on Mac OS or there is a repository for Debian and Ubuntu.
 
 Run Command, Query and Event Store applications in the `event-store` profile
 ````
@@ -79,18 +112,8 @@ $ SPRING_PROFILES_ACTIVE=event-store ./gradlew :query:bootRun
 $ ./gradlew :event-store:bootRun
 ````
 
-
-### Command
-
-The Command application accepts the HTTP verbs POST, PATCH, PUT and DELETE. It represents the Command side of CQRS. A profile is required to run the app: `kafak`, `event-store`.
-
-### Query
-
-The Query application accepts the HTTP verb GET. It represents the Query side of CQRS. A profile is required to run the app: `kafak`, `event-store`.
-
-### Event Store
-
-This application sets up the Event Store with an H2 backend. It uses Spring Data JPA and will work with any compliant datasource.
+Monitor the database
+Go to the [h2 console](http://localhost:9082/h2-console). Connect to the database `jdbc:h2:mem:testdb`.
 
 
 [kafka-architecture]: images/Event%20Source%20Demo%20-%20Kafka.png "Kafka Architecture"

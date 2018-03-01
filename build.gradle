@@ -12,14 +12,13 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 group 'io.pivotal.dmfrey'
 version '1.0-SNAPSHOT'
 
-allprojects {
+subprojects {
 
     apply plugin: 'java'
     apply plugin: 'eclipse'
