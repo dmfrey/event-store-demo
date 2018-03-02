@@ -187,13 +187,15 @@ Go to the [h2 console](http://localhost:9082/h2-console). Connect to the databas
 
 ## Using the API
 
-All of the implemented capabilities are available in the API Documentation at [docs](http://localhost:8765/docs/index.html). Below are some simple `curl` commands to interact with the API. These can also be ported to a rest client, such as Postman.
+All of the implemented capabilities are available in the API Documentation at [docs](http://localhost:8765/docs/index.html). Below are some simple `curl` commands to interact with the API. These can also be ported to a rest client, such as Postman. Also note, these examples use dummy UUIDs. The documentation and the real services need to work with actual UUIDs.
 
 ### Create a new Board
 
 ````
 $ curl 'http://localhost:8765/boards' -i -X POST
 ````
+
+Look for a `LOCATION` header to contain the URL of the new board.
 
 ### Rename an existing Board
 ````
