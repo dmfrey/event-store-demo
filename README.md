@@ -50,7 +50,7 @@ public class Board {
 
 The `Board` snippet shows the following:
 1. The `Board` has an internal state attribute: `name`
-2. A command, `renameEvent` can be acted upon to initiate and internal state changes
+2. A command, `renameBoard` can be acted upon to initiate and internal state changes
 3. Invariants can be validated before recording a new `DomainEvent`
 4. A `DomainEvent` triggers the internal state change
 5. `DomainEvents` are recorded in a change log 
@@ -116,9 +116,7 @@ $ spring cloud eureka
 
 ### API
 
-The API application is a common gateway layer between Command and Query applications. The lower applications are separated in typical CQRS fashion.
-
-The applications is a Spring Boot 2 application and is simply a proxy service to the lower apps.
+The API application is a common gateway layer between Command and Query applications. The lower applications are separated in typical CQRS fashion. It is a Spring Boot 2 application and is simply a proxy service to the lower apps.
 
 API Documentation is produced by Spring RestDocs and is available at [docs](http://localhost:8765/docs/index.html). In order to see this page, you must run the Spring Boot fat jar.
 ````
@@ -137,7 +135,7 @@ Once the `DomainEvent`s are in the topic, the command and query applications eac
 
 A `KStream` is an unbounded stream of data, in this case, `DomainEvent`s.  The stream acts both as a persistence layer as well as a notification layer. Events in the stream can then subscribed to, filtered, transformed, etc in any number of ways.
 
-A `KTable` uses the above `KStream` as input and first groups all of the events by their `boardUuid`.  The grouped events are continually updated as new events are to the stream by the Command application. The groups allow the data to be aggregated, essentiall folding the events in sequence to produce a `Board` view that respective to each application.
+A `KTable` uses the above `KStream` as input and first groups all of the events by their `boardUuid`.  The grouped events are continually updated as new events are to the stream by the Command application. The groups allow the data to be aggregated, essentiall folding the events in sequence to produce a `Board` view that is respective to each application.
 
 For instance, the Query application doesn't necessarily care about the maintaining an exact sequence of events in the materialized view, where as the Command application does, so that it can track the new change events from the existing ones.
 
