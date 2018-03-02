@@ -137,7 +137,7 @@ A `KStream` is an unbounded stream of data, in this case, `DomainEvent`s.  The s
 
 A `KTable` uses the above `KStream` as input and first groups all of the events by their `boardUuid`.  The grouped events are continually updated as new events are to the stream by the Command application. The groups allow the data to be aggregated, essentiall folding the events in sequence to produce a `Board` view that is respective to each application.
 
-For instance, the Query application doesn't necessarily care about the maintaining an exact sequence of events in the materialized view, where as the Command application does, so that it can track the new change events from the existing ones.
+For instance, the Query application does not necessarily care about the maintaining a list of events in the materialized view, where as the Command application does, so that it can track the new change events from the existing ones.
 
 ![kafka architecture][kafka-architecture]
 
