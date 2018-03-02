@@ -26,7 +26,7 @@ public class Board {
       boardRenamed( new BoardRenamed( name, this.boardUuid, Instant.now() );
   }
 
-  public Board boardRenamed( final BoardRenamed event ) { [4]
+  private Board boardRenamed( final BoardRenamed event ) { [4]
       this.name = name;
       this.changes.add( event ); [5]
       return this;
