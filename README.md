@@ -8,6 +8,72 @@ This application was unique in that we implemented the backend with Apache Kafka
 
 This application is a simple Kanban. It only allows for minimal board and story management.
 
+The core view of application is a `Board`. It internal state is able to be derived from any list of `DomainEvent`s supplied to it.  The snippet below illustrates this.
+
+````
+public class Board {
+
+  private String name; [1]
+  
+  public String getName() {
+    return this.name;
+  }
+
+  public void renameBoard( final String name ) { [2]
+      if( null == name || “”.equals( name ) { [3]
+          throw new IllegalArgumentException( “name is not valid” );
+      }
+      boardRenamed( new BoardRenamed( name, this.boardUuid, Instant.now() );
+  }
+
+  public Board boardRenamed( final BoardRenamed event ) { [4]
+      this.name = name;
+      this.changes.add( event ); [5]
+      return this;
+  }
+
+  public static Board createFrom( final UUID boardUuid, final Collection<DomainEvent> domainEvents ) { [6]
+      return ofAll( domainEvents ).foldLeft( new Board( boardUuid ), Board::handleEvent );
+  }
+
+  public Board handleEvent( final DomainEvent event ) {
+      return API.Match( domainEvent ).of(
+         Case( $( instanceOf( BoardInitialized.class ) ), this::boardInitialized ),
+         Case( $( instanceOf( BoardRenamed.class ) ), this::boardRenamed ),
+         ...
+         Case( $(), this )
+      );
+  }
+}
+
+````
+
+The `Board` snippet shows the following:
+1. The `Board` has an internal state attribute: `name`
+2. A command, `renameEvent` can be acted upon to initiate and internal state changes
+3. Invariants can be validated before recording a new `DomainEvent`
+4. A `DomainEvent` triggers the internal state change
+5. `DomainEvents` are recorded in a change log 
+6. The internal state can be rebuilt from a collection of `DomainEvent`s that represent the application state for a `Board`
+
+The key thing to note here is that a `Board` is not a POJO with just getters and setters. Folding all of the `DomainEvent`s in sequence makes up the internal application state. This could represent the current application state today, or the `DomainEvent`s could filtered by time to replay the application state to a prior point in time.
+
+#### Anatomy of an Event
+
+`DomainEvent`s are represented as JSON.  JSON is easy to understand, read, query and parse. Since this is a Spring Boot application, written in Java, the `DomainEvent`s are marshaled to JSON with Jackson.  However, tracking events in the event store does not assume you will use Java.  Any language could be used to read and write events from/to the event store.
+
+There is some context that needs to be derived from each event, however. Loosely, these are "header" fields in the payload that direct processors how to handle the events.
+````
+{
+    “eventType”: “BoardInitialized”,
+    “boardUuid”: "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2",
+    “occurredOn”: "2018-02-23T03:49:52.313Z",
+    ....
+}
+````
+
+In the above event, the type of event can be determined as can the UUID of the `Board` in which it applies.  Also note the `occurredOn` date.  It is the means by which prior states can be derived. An application could lookup a list of `DomainEvent` and apply a filter up to a supplied `occurredOn` date to see what the application state was at that point in time. 
+
 ### Build the Demo App
 
 All of the applications are sub projects of a parent Gradle build script.  Building the apps is easy with the included Gradle Wrapper.
