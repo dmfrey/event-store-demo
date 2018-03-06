@@ -1,5 +1,6 @@
 package io.pivotal.dmfrey.eventStoreDemo.endpoint;
 
+import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -153,7 +155,7 @@ public class ApiControllerTests {
     @Test
     public void testBoard() throws Exception {
 
-        when( this.service.board( any( UUID.class ) ) ).thenReturn( ResponseEntity.ok( BOARD_JSON ) );
+        when( this.service.board( any( UUID.class ) ) ).thenReturn( new ResponseEntity<>( craeteBoard(), HttpStatus.OK ) );
 
         this.mockMvc.perform( get( "/boards/{boardUuid}", UUID.randomUUID() ) )
                 .andExpect( status().isOk() )
@@ -169,6 +171,14 @@ public class ApiControllerTests {
 
         verify( this.service, times( 1 ) ).board( any( UUID.class ) );
 
+    }
+
+    private Board craeteBoard() {
+
+        Board board = new Board();
+        board.setName( "My Board" );
+
+        return board;
     }
 
 }

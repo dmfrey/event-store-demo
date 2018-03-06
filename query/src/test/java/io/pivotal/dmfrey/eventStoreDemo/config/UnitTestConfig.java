@@ -23,6 +23,12 @@ public class UnitTestConfig {
                 throw new UnsupportedOperationException( "client call not implemented yet" );
             }
 
+            @Override
+            public void removeFromCache(UUID boardUuid) {
+
+                throw new UnsupportedOperationException( "client call not implemented yet" );
+            }
+
         };
 
     }

@@ -6,6 +6,8 @@ import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvent;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvents;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,6 +26,7 @@ public class EventStoreBoardClient implements BoardClient {
     }
 
     @Override
+    @Cacheable( "boards" )
     public Board find( final UUID boardUuid ) {
         log.debug( "find : enter" );
 
@@ -38,6 +41,16 @@ public class EventStoreBoardClient implements BoardClient {
 
         log.debug( "find : exit" );
         return board;
+    }
+
+    @Override
+    @CacheEvict( value = "boards", key = "#boardUuid" )
+    public void removeFromCache( final UUID boardUuid ) {
+        log.debug( "removeFromCache : enter" );
+
+        // this method is intentionally left blank
+
+        log.debug( "removeFromCache : exit" );
     }
 
 }

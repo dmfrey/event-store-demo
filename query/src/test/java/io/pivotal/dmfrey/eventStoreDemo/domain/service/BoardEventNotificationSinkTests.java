@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -40,7 +43,8 @@ public class BoardEventNotificationSinkTests {
     @Test
     public void testProcessNotificationBoardInitialized() throws Exception {
 
-        this.channels.input().send( new GenericMessage<>( BOARD_INITIALIZED_EVENT ) );
+        Message message = MessageBuilder.withPayload( BOARD_INITIALIZED_EVENT ).setHeader( MessageHeaders.CONTENT_TYPE,"application/x-spring-tuple" ).build();
+        this.channels.input().send( message );
 
         verify( this.service, times( 0 ) ).uncacheTarget( any( UUID.class ) );
 

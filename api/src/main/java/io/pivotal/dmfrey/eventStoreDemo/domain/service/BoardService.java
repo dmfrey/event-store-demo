@@ -1,6 +1,7 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.service;
 
 import io.pivotal.dmfrey.eventStoreDemo.domain.config.RestConfig;
+import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
@@ -42,7 +43,7 @@ public class BoardService {
         return this.commandClient.deleteStory( boardUuid, storyUuid );
     }
 
-    public ResponseEntity board( final UUID boardUuid ) {
+    public ResponseEntity<Board> board( final UUID boardUuid ) {
 
         return this.queryClient.board( boardUuid );
     }

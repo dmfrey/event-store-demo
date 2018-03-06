@@ -8,4 +8,6 @@ public interface BoardClient {
 
     Board find( final UUID boardUuid );
 
+    void removeFromCache( final UUID boardUuid );
+
 }

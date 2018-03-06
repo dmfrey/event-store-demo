@@ -2,6 +2,8 @@ debug: false
 
 logger.level:
   io.pivotal.dmfrey: DEBUG
+  org.springframework.web: DEBUG
+  com.netflix.feign: DEBUG
 
 server:
   port: ${PORT:8765}

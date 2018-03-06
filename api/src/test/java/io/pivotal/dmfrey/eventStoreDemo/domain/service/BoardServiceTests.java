@@ -1,10 +1,13 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.pivotal.dmfrey.eventStoreDemo.domain.config.ApiConfig;
 import io.pivotal.dmfrey.eventStoreDemo.domain.config.RestConfig;
+import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.MultiValueMap;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.UUID;
@@ -27,9 +32,13 @@ import static org.mockito.Mockito.when;
 
 @RunWith( SpringRunner.class )
 @SpringBootTest( classes = ApiConfig.class )
+@JsonTest
 public class BoardServiceTests {
 
     private static final String BOARD_JSON = "{\"name\":\"My Board\",\"backlog\":[{\"storyUuid\":\"242500df-373e-4e70-90bc-3c8cd54c81d8\",\"name\":\"My Story 1\"}]}";
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Autowired
     private BoardService service;
@@ -113,15 +122,23 @@ public class BoardServiceTests {
     @Test
     public void testBoardStory() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        when( this.queryClient.board( any( UUID.class ) ) ).thenReturn( ResponseEntity.ok( BOARD_JSON ) );
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType( MediaType.APPLICATION_JSON );
 
-        ResponseEntity response = this.service.board( boardUuid );
+        UUID boardUuid = UUID.randomUUID();
+        when( this.queryClient.board( any( UUID.class ) ) ).thenReturn( new ResponseEntity<>( craeteBoard(), headers, HttpStatus.OK ) );
+
+        ResponseEntity<Board> response = this.service.board( boardUuid );
         assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.OK );
-        assertThat( response.getBody() ).isEqualTo( BOARD_JSON );
+        assertThat( response.getBody() ).isEqualTo( craeteBoard() );
 
         verify( this.queryClient, times( 1 ) ).board( any( UUID.class ) );
 
+    }
+
+    private Board craeteBoard() throws IOException {
+
+        return mapper.readValue( BOARD_JSON, Board.class );
     }
 
 }

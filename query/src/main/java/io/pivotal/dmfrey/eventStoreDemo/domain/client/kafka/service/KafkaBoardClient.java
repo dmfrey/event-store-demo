@@ -56,4 +56,10 @@ public class KafkaBoardClient implements BoardClient {
         throw new IllegalArgumentException( "board[" + boardUuid.toString() + "] not found!" );
     }
 
+    @Override
+    public void removeFromCache(UUID boardUuid) {
+
+        throw new UnsupportedOperationException( "this method is not implemented in kafka client" );
+    }
+
 }

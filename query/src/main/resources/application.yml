@@ -1,7 +1,8 @@
 debug: false
 
-logging.level:
+logger.level:
   io.pivotal.dmfrey: DEBUG
+  org.springframework.web: DEBUG
 
 server:
   port: ${PORT:9081}
@@ -35,6 +36,7 @@ spring:
       bindings:
         input:
           destination: board-events
+          contentType: application/json
           group: query-board-events-group
           consumer:
             useNativeDecoding: true

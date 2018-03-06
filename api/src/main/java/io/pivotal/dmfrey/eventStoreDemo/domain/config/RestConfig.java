@@ -1,5 +1,6 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.config;
 
+import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Configuration;
@@ -15,19 +16,19 @@ public class RestConfig {
     @FeignClient( value = "command" )
     public interface CommandClient {
 
-        @PostMapping( path = "/" )
+        @PostMapping( path = "/boards/" )
         ResponseEntity createBoard();
 
-        @PatchMapping( path = "/{boardUuid}" )
+        @PatchMapping( path = "/boards/{boardUuid}" )
         ResponseEntity renameBoard( @PathVariable( "boardUuid" ) UUID boardUuid, @RequestParam( name = "name", required = true ) String name );
 
-        @PostMapping( path = "/{boardUuid}/stories" )
+        @PostMapping( path = "/boards/{boardUuid}/stories" )
         ResponseEntity addStory( @PathVariable( "boardUuid" ) UUID boardUuid, @RequestParam( name = "name", required = true ) String name );
 
-        @PutMapping( path = "/{boardUuid}/stories/{storyUuid}" )
+        @PutMapping( path = "/boards/{boardUuid}/stories/{storyUuid}" )
         ResponseEntity updateStory( @PathVariable( "boardUuid" ) UUID boardUuid, @PathVariable( "storyUuid" ) UUID storyUuid, @RequestParam( "name" ) String name );
 
-        @DeleteMapping( path = "/{boardUuid}/stories/{storyUuid}" )
+        @DeleteMapping( path = "/boards/{boardUuid}/stories/{storyUuid}" )
         ResponseEntity deleteStory( @PathVariable( "boardUuid" ) UUID boardUuid, @PathVariable( "storyUuid" ) UUID storyUuid );
 
     }
@@ -35,8 +36,8 @@ public class RestConfig {
     @FeignClient( value = "query" )
     public interface QueryClient {
 
-        @GetMapping( path = "/{boardUuid}" )
-        ResponseEntity board( @PathVariable( "boardUuid" ) UUID boardId );
+        @GetMapping( path = "/boards/{boardUuid}" )
+        ResponseEntity<Board> board( @PathVariable( "boardUuid" ) UUID boardId );
 
     }
 

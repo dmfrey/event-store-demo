@@ -19,7 +19,7 @@ public class BoardService {
 
     }
 
-    @Cacheable( "boards" )
+//    @Cacheable( "boards" )
     public Board find( final UUID boardUuid ) {
         log.debug( "find : enter" );
 
@@ -30,11 +30,11 @@ public class BoardService {
         return board;
     }
 
-    @CacheEvict( value = "boards", key = "#boardUuid" )
+//    @CacheEvict( value = "boards", key = "#boardUuid" )
     public void uncacheTarget( final UUID boardUuid ) {
         log.debug( "uncacheTarget : enter" );
 
-        // this method is intentionally left blank
+        this.client.removeFromCache( boardUuid );
 
         log.debug( "uncacheTarget : exit" );
     }
