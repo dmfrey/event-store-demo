@@ -1,6 +1,6 @@
 # Event Store Demo
 
-We recently finished work on a system for the USAF in which we built an Event Source system. This application is a demo of the architecture we produced.
+We recently finished work on a system in which we built an Event Source system. This application is a demo of the architecture we produced.
 
 This application was unique in that we implemented the backend with Apache Kafka, MongoDb and MySQL. The final solution was based on MySQL, however, the reasons for not using the other two solutions were not technical. Kafka and MongoDb would not be available in the production environments, so we adjusted.
 
