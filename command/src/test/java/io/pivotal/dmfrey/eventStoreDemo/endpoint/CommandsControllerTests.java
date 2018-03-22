@@ -16,9 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -46,6 +44,7 @@ public class CommandsControllerTests {
                 .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() ) ) ) );
 
         verify( this.service, times( 1 ) ).createBoard();
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -59,6 +58,7 @@ public class CommandsControllerTests {
                 .andExpect( status().isAccepted() );;
 
         verify( this.service, times( 1 ) ).renameBoard( any( UUID.class ), anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -75,6 +75,7 @@ public class CommandsControllerTests {
                 .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ) ) );
 
         verify( this.service, times( 1 ) ).addStory( any( UUID.class ), anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -89,6 +90,7 @@ public class CommandsControllerTests {
                 .andExpect( status().isAccepted() );
 
         verify( this.service, times( 1 ) ).updateStory( any( UUID.class ), any( UUID.class ), anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -103,6 +105,7 @@ public class CommandsControllerTests {
                 .andExpect( status().isAccepted() );
 
         verify( this.service, times( 1 ) ).deleteStory( any( UUID.class ), any( UUID.class ) );
+        verifyNoMoreInteractions( this.service );
 
     }
 

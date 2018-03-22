@@ -16,7 +16,7 @@ public class RestConfig {
     @FeignClient( value = "command" )
     public interface CommandClient {
 
-        @PostMapping( path = "/boards/" )
+        @PostMapping( path = "/boards" )
         ResponseEntity createBoard();
 
         @PatchMapping( path = "/boards/{boardUuid}" )

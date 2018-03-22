@@ -50,6 +50,9 @@ public class DomainEventServiceTests {
                 .containsExactly( BOARD_INITIALIZED_EVENT );
 
         verify( this.repository, times( 1 ) ).findById( anyString() );
+        verifyNoMoreInteractions( this.repository );
+        verifyNoMoreInteractions( this.notificationPublisher );
+
 
     }
 
@@ -61,6 +64,8 @@ public class DomainEventServiceTests {
         this.service.getDomainEvents( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" );
 
         verify( this.repository, times( 1 ) ).findById( anyString() );
+        verifyNoMoreInteractions( this.repository );
+        verifyNoMoreInteractions( this.notificationPublisher );
 
     }
 
@@ -71,6 +76,8 @@ public class DomainEventServiceTests {
 
         verify( this.repository, times( 1 ) ).save( any( DomainEventsEntity.class ) );
         verify( this.notificationPublisher, times( 1 ) ).sendNotification( any( Tuple.class ) );
+        verifyNoMoreInteractions( this.repository );
+        verifyNoMoreInteractions( this.notificationPublisher );
 
     }
 
@@ -85,6 +92,8 @@ public class DomainEventServiceTests {
         verify( this.repository, times( 1 ) ).findById( anyString() );
         verify( this.repository, times( 1 ) ).save( any( DomainEventsEntity.class ) );
         verify( this.notificationPublisher, times( 1 ) ).sendNotification( any( Tuple.class ) );
+        verifyNoMoreInteractions( this.repository );
+        verifyNoMoreInteractions( this.notificationPublisher );
 
     }
 

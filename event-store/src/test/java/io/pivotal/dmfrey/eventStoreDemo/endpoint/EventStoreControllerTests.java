@@ -45,6 +45,7 @@ public class EventStoreControllerTests {
                 .andExpect( status().isAccepted() );
 
         verify( this.service, times( 1 ) ).processDomainEvent( any( Tuple.class ) );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -62,6 +63,7 @@ public class EventStoreControllerTests {
                 .andExpect( content().json( domainEventsJson ) );
 
         verify( this.service, times( 1 ) ).getDomainEvents( anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 

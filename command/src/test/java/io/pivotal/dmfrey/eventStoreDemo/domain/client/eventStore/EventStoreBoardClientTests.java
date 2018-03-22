@@ -45,6 +45,7 @@ public class EventStoreBoardClientTests {
         this.boardClient.save( board );
 
         verify( this.eventStoreClient, times( 1 ) ).addNewDomainEvent( any( DomainEvent.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -59,6 +60,7 @@ public class EventStoreBoardClientTests {
         this.boardClient.save( board );
 
         verify( this.eventStoreClient, times( 1 ) ).addNewDomainEvent( any( DomainEvent.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -80,6 +82,7 @@ public class EventStoreBoardClientTests {
         assertThat( board.changes() ).hasSize( 0 );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -95,6 +98,7 @@ public class EventStoreBoardClientTests {
         this.boardClient.find( boardUuid );
 
         verify( this.eventStoreClient, times( 1 ) ).addNewDomainEvent( any( DomainEvent.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 

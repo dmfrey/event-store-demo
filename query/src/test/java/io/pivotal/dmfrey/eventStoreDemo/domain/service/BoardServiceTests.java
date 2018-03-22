@@ -49,6 +49,7 @@ public class BoardServiceTests {
         this.service.find( UUID.randomUUID() );
 
         verify( this.client, times( 1 ) ).find( any( UUID.class ) );
+        verifyNoMoreInteractions( this.client );
 
     }
 

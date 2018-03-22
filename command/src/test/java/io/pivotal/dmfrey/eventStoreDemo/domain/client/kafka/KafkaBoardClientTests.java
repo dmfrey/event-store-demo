@@ -25,6 +25,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 //import static org.springframework.cloud.stream.test.matcher.MessageQueueMatcher.receivesPayloadThat;
 
 @RunWith( SpringRunner.class )
@@ -66,6 +67,7 @@ public class KafkaBoardClientTests {
         this.boardClient.save( board );
 //
 //        assertThat( messages, receivesPayloadThat( is( event ) ) );
+        verifyNoMoreInteractions( this.queryableStoreRegistry );
 
     }
 

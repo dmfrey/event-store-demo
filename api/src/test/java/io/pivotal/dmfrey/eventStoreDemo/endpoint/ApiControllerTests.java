@@ -57,6 +57,7 @@ public class ApiControllerTests {
                 .andDo( document("create-board" ) );
 
         verify( this.service, times( 1 ) ).createBoard();
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -79,6 +80,7 @@ public class ApiControllerTests {
                 ));
 
         verify( this.service, times( 1 ) ).renameBoard( any( UUID.class ), anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -103,6 +105,7 @@ public class ApiControllerTests {
                 ));
 
         verify( this.service, times( 1 ) ).addStory( any( UUID.class ), anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -128,6 +131,7 @@ public class ApiControllerTests {
 
 
         verify( this.service, times( 1 ) ).updateStory( any( UUID.class ), any( UUID.class ), anyString() );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -149,6 +153,7 @@ public class ApiControllerTests {
                 ));
 
         verify( this.service, times( 1 ) ).deleteStory( any( UUID.class ), any( UUID.class ) );
+        verifyNoMoreInteractions( this.service );
 
     }
 
@@ -170,6 +175,7 @@ public class ApiControllerTests {
 
 
         verify( this.service, times( 1 ) ).board( any( UUID.class ) );
+        verifyNoMoreInteractions( this.service );
 
     }
 

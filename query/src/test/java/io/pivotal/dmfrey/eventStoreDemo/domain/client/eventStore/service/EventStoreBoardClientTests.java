@@ -48,6 +48,7 @@ public class EventStoreBoardClientTests {
         assertThat( found.getStories() ).hasSize( 0 );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -65,6 +66,7 @@ public class EventStoreBoardClientTests {
         assertThat( found.getStories() ).hasSize( 0 );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -86,6 +88,7 @@ public class EventStoreBoardClientTests {
                 .containsValue( createStoryAddedEvent().getStory() );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -108,6 +111,7 @@ public class EventStoreBoardClientTests {
                 .containsValue( createStoryUpdatedEvent().getStory() );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 
@@ -128,6 +132,7 @@ public class EventStoreBoardClientTests {
         assertThat( found.getStories() ).hasSize( 0 );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
 
     }
 

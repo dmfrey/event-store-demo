@@ -14,14 +14,12 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith( SpringRunner.class )
 @SpringBootTest( classes = { BoardService.class },
         properties = {
-            "spring.cloud.service-registry.auto-registration.enabled=false"
+            "--spring.cloud.service-registry.auto-registration.enabled=false"
         }
 )
 public class BoardServiceTests {
@@ -39,6 +37,7 @@ public class BoardServiceTests {
         assertThat( boardUuid ).isNotNull();
 
         verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        verifyNoMoreInteractions( this.client );
 
     }
 
@@ -56,6 +55,7 @@ public class BoardServiceTests {
 
         verify( this.client, times( 1 ) ).find( any( UUID.class ) );
         verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        verifyNoMoreInteractions( this.client );
 
     }
 
@@ -76,6 +76,7 @@ public class BoardServiceTests {
 
         verify( this.client, times( 1 ) ).find( any( UUID.class ) );
         verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        verifyNoMoreInteractions( this.client );
 
     }
 
@@ -100,6 +101,7 @@ public class BoardServiceTests {
 
         verify( this.client, times( 1 ) ).find( any( UUID.class ) );
         verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        verifyNoMoreInteractions( this.client );
 
     }
 
@@ -123,6 +125,7 @@ public class BoardServiceTests {
 
         verify( this.client, times( 1 ) ).find( any( UUID.class ) );
         verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        verifyNoMoreInteractions( this.client );
 
     }
 
