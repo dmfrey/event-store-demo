@@ -1,15 +1,27 @@
 buildscript {
+
     ext {
+
         springBootVersion = '2.0.0.RELEASE'
+        springCloudContractVersion = '1.2.3.RELEASE'
+
     }
+
     repositories {
+
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+
     }
+
     dependencies {
+
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.springframework.cloud:spring-cloud-contract-gradle-plugin:${springCloudContractVersion}"
+
     }
+
 }
 
 apply plugin: 'idea'
@@ -21,9 +33,10 @@ version '1.0-SNAPSHOT'
 subprojects {
 
     apply plugin: 'java'
-    apply plugin: 'eclipse'
+    apply plugin: 'groovy'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'spring-cloud-contract'
 
     group = 'io.pivotal.dmfrey'
     version = '0.0.1-SNAPSHOT'
@@ -31,13 +44,17 @@ subprojects {
     targetCompatibility = 1.8
 
     repositories {
+
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+
     }
 
     ext {
+
         springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
+
     }
 
     dependencies {
@@ -62,13 +79,27 @@ subprojects {
         // Test dependencies
         testCompile('org.springframework.boot:spring-boot-starter-test')
 
+        testCompile('org.codehaus.groovy:groovy-all:2.4.6')
+        testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
+        testCompile('org.spockframework:spock-spring:1.0-groovy-2.4')
+        testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier')
+        testCompile('org.springframework.cloud:spring-cloud-contract-wiremock')
+
     }
 
     dependencyManagement {
 
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "org.springframework.cloud:spring-cloud-contract-dependencies:${springCloudContractVersion}"
         }
+
+    }
+
+    contracts {
+
+        basePackageForTests = 'io.pivotal.dmfrey.eventStoreDemo'
+        baseClassForTests = 'io.pivotal.dmfrey.eventStoreDemo.ContractBaseTests'
 
     }
 

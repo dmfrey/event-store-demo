@@ -1,29 +1,3 @@
-buildscript {
-
-    ext {
-        springCloudContractVersion = '1.2.3.RELEASE'
-    }
-
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.springframework.cloud:spring-cloud-contract-gradle-plugin:${springCloudContractVersion}"
-    }
-
-}
-
-apply plugin: 'groovy'
-apply plugin: 'spring-cloud-contract'
-
-dependencyManagement {
-
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-contract-dependencies:${springCloudContractVersion}"
-    }
-
-}
 
 dependencies {
 
@@ -50,19 +24,6 @@ dependencies {
     testCompile('org.springframework.cloud:spring-cloud-stream-binder-test:2.0.0.RC2')
     testCompile('org.springframework.kafka:spring-kafka-test')
 
-    testCompile('org.codehaus.groovy:groovy-all:2.4.6')
-    testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
-    testCompile('org.spockframework:spock-spring:1.0-groovy-2.4')
-    testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier')
-    testCompile('org.springframework.cloud:spring-cloud-contract-wiremock')
-
     testCompile('org.springframework.cloud:spring-cloud-stream-test-support')
-
-}
-
-contracts {
-
-    basePackageForTests = 'io.pivotal.dmfrey.eventStoreDemo'
-    baseClassForTests = 'io.pivotal.dmfrey.eventStoreDemo.ContractBaseTests'
 
 }
