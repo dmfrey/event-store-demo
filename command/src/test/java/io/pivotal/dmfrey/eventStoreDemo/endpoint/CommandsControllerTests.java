@@ -40,7 +40,7 @@ public class CommandsControllerTests {
         UUID boardUuid = UUID.randomUUID();
         when( this.service.createBoard() ).thenReturn( boardUuid );
 
-        this.mockMvc.perform( post( "/boards/" ).param( "name", "Test Board" ) )
+        this.mockMvc.perform( post( "/boards" ).param( "name", "Test Board" ) )
                 .andDo( print() )
                 .andExpect( status().isCreated() )
                 .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() ) ) ) );

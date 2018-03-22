@@ -19,7 +19,7 @@ public class CommandsController {
 
     }
 
-    @PostMapping( "/" )
+    @PostMapping
     public ResponseEntity createBoard( final UriComponentsBuilder uriComponentsBuilder ) {
 
         UUID boardUuid = this.service.createBoard();

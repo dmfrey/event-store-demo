@@ -21,11 +21,11 @@ public class BoardRenamed extends DomainEvent {
 
     @JsonCreator
     public BoardRenamed(
-            @JsonProperty( "name" ) final String name,
-            @JsonProperty( "boardUuid" ) final UUID boardUuid,
-            @JsonProperty( "occurredOn" ) final Instant when
+        @JsonProperty( "name" ) final String name,
+        @JsonProperty( "boardUuid" ) final UUID boardUuid,
+        @JsonProperty( "occurredOn" ) final Instant when
     ) {
-        super( boardUuid, when );
+            super( boardUuid, when );
 
         this.name = name;
 
