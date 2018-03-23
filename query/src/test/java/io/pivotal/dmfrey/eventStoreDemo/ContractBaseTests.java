@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith( SpringRunner.class )
@@ -45,6 +46,8 @@ public abstract class ContractBaseTests {
         when( this.service.find( any( UUID.class )) ).thenReturn( createBoard() );
 
         RestAssuredMockMvc.standaloneSetup( this.controller );
+
+        verifyNoMoreInteractions( this.service );
 
     }
 

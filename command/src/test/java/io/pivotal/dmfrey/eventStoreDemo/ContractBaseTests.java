@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith( SpringRunner.class )
@@ -46,6 +47,8 @@ public abstract class ContractBaseTests {
         when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( this.storyUuid );
 
         RestAssuredMockMvc.standaloneSetup( this.controller );
+
+        verifyNoMoreInteractions( this.service );
 
     }
 
