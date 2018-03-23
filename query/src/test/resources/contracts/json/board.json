@@ -1,0 +1,13 @@
+{
+  "name": "My Board",
+  "backlog": [
+    {
+      "storyUuid": "10240df9-4a1e-4fa4-bbd1-0bb33d764603",
+      "name": "Story 1"
+    },
+    {
+      "storyUuid": "6f9b00bd-e47a-47ff-84e6-fc0171d0bc89",
+      "name": "Story 2"
+    }
+  ]
+}

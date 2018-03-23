@@ -1,24 +1,21 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableList;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.*;
 import io.vavr.API;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
 import static io.vavr.collection.Stream.ofAll;
-import static lombok.AccessLevel.NONE;
 
 @Data
 @Slf4j
