@@ -14,6 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 @RunWith( SpringRunner.class )
 @SpringBootTest(
         properties = {
@@ -32,14 +37,18 @@ public abstract class ContractBaseTests {
     @MockBean
     private DomainEventService service;
 
-    private UUID boardUuid = UUID.fromString( "12345678-90ab-cdef-1234-567890abcdef" );
+    private UUID boardUuid = UUID.fromString( "11111111-90ab-cdef-1234-567890abcdef" );
+    private UUID storyUuid = UUID.fromString( "22222222-90ab-cdef-1234-567890abcdef" );
 
     @Before
     public void setup() {
 
 //        when( this.service.createBoard() ).thenReturn( this.boardUuid );
+//        when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( this.storyUuid );
 
         RestAssuredMockMvc.standaloneSetup( this.controller );
+
+        verifyNoMoreInteractions( this.service );
 
     }
 
