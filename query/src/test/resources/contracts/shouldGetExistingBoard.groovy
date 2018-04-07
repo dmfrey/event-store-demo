@@ -8,7 +8,7 @@ Contract.make {
 
         method GET()
 
-        url '/boards/' + anyUuid().serverValue
+        urlPath( value( consumer( regex( '/boards/' + uuid().pattern() ) ) ) )
 
     }
 

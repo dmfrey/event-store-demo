@@ -2,8 +2,9 @@ buildscript {
 
     ext {
 
-        springBootVersion = '2.0.0.RELEASE'
-        springCloudContractVersion = '1.2.3.RELEASE'
+        springBootVersion = '2.0.1.RELEASE'
+        springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
+        springCloudContractVersion = '2.0.0.M8'
 
     }
 
@@ -33,10 +34,12 @@ version '1.0-SNAPSHOT'
 subprojects {
 
     apply plugin: 'java'
+    apply plugin: 'maven'
     apply plugin: 'groovy'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'spring-cloud-contract'
+    apply from: "$rootDir/tools/jacoco.gradle"
 
     group = 'io.pivotal.dmfrey'
     version = '0.0.1-SNAPSHOT'
@@ -102,5 +105,36 @@ subprojects {
         baseClassForTests = 'io.pivotal.dmfrey.eventStoreDemo.ContractBaseTests'
 
     }
+
+    tasks.withType (Test) {
+
+        maxParallelForks = 2
+
+        testLogging {
+
+            showStandardStreams = true
+            events 'started', 'passed', 'failed'
+
+        }
+
+        jacoco {
+
+            append = false
+            destinationFile = file("$buildDir/jacoco/${name}.exec")
+            classDumpDir = file("$buildDir/jacoco/${name}_ClassDump")
+
+        }
+
+    }
+
+    test {
+
+        description 'Used for running unit tests.'
+
+        include '**/**Tests.java'
+
+    }
+
+    build.finalizedBy jacocoTestReport, jacocoTestCoverageVerification
 
 }

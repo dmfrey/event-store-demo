@@ -82,10 +82,11 @@ public class BoardServiceTests {
     public void testAddStory() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        when( this.commandClient.addStory( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
+        UUID storyUuid = UUID.randomUUID();
+        when( this.commandClient.addStory( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ).build() );
 
         ResponseEntity response = this.service.addStory( boardUuid, "My Story 1" );
-        assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.ACCEPTED );
+        assertThat( response.getStatusCode() ).isEqualTo( HttpStatus.CREATED );
 
         verify( this.commandClient, times( 1 ) ).addStory( any( UUID.class ), anyString() );
 

@@ -8,7 +8,7 @@ Contract.make {
 
         method DELETE()
 
-        url '/boards/' + anyUuid().serverValue + "/stories/" + anyUuid().serverValue
+        urlPath( value( consumer( regex( '/boards/' + uuid().pattern() + "/stories/" + uuid().pattern() ) ) ) )
 
     }
 

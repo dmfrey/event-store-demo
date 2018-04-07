@@ -42,7 +42,8 @@ public abstract class ContractBaseTests {
     private BoardService service;
 
     private String boardUuid = "11111111-90ab-cdef-1234-567890abcdef";
-    private String storyUuid = "22222222-90ab-cdef-1234-567890abcdef";
+    private String storyOneUuid = "22222222-90ab-cdef-1234-567890abcdef";
+    private String storyTwoUuid = "33333333-90ab-cdef-1234-567890abcdef";
 
     @Before
     public void setup() {
@@ -50,7 +51,7 @@ public abstract class ContractBaseTests {
         when( this.service.createBoard() ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + this.boardUuid ) ).build() );
         when( this.service.board( any( UUID.class ) ) ).thenReturn( ResponseEntity.ok( createBoard() ) );
         when( this.service.renameBoard( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
-        when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + this.boardUuid + "/stories/" + this.storyUuid ) ).build() );
+        when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + this.boardUuid + "/stories/" + this.storyOneUuid ) ).build() );
         when( this.service.updateStory( any( UUID.class ), any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
         when( this.service.deleteStory( any( UUID.class ), any( UUID.class ) ) ).thenReturn( ResponseEntity.accepted().build() );
 
@@ -67,12 +68,12 @@ public abstract class ContractBaseTests {
 
         List<Story> stories = new ArrayList<>();
         Story story1 = new Story();
-        story1.setStoryUuid( UUID.fromString( "10240df9-4a1e-4fa4-bbd1-0bb33d764603" ) );
+        story1.setStoryUuid( UUID.fromString( storyOneUuid ) );
         story1.setName( "Story 1" );
         stories.add( story1 );
 
         Story story2 = new Story();
-        story2.setStoryUuid( UUID.fromString( "6f9b00bd-e47a-47ff-84e6-fc0171d0bc89" ) );
+        story2.setStoryUuid( UUID.fromString( storyTwoUuid ) );
         story2.setName( "Story 2" );
         stories.add( story2 );
 

@@ -8,11 +8,11 @@ Contract.make {
 
         method PATCH()
 
-        urlPath( '/boards/' + anyUuid().serverValue ) {
+        urlPath( value( consumer( regex( '/boards/' + uuid().pattern() ) ) ) ) {
 
             queryParameters {
 
-                parameter 'name' : value( consumer( matching( anyNonEmptyString() ) ), producer( "My Board" ) )
+                parameter 'name' : anyNonEmptyString()
 
             }
 
