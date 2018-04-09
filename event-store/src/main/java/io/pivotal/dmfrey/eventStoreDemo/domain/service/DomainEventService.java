@@ -22,17 +22,15 @@ public class DomainEventService {
     private final DomainEventsRepository domainEventsRepository;
     private final NotificationPublisher publisher;
     private final TupleToJsonStringConverter toJsonStringConverter;
-    private final JsonStringToTupleConverter toTupleConverter;
 
 
     public DomainEventService(
             final DomainEventsRepository domainEventsRepository, final NotificationPublisher publisher,
-            final TupleToJsonStringConverter toJsonStringConverter, final JsonStringToTupleConverter toTupleConverter) {
+            final TupleToJsonStringConverter toJsonStringConverter ) {
 
         this.domainEventsRepository = domainEventsRepository;
         this.publisher = publisher;
         this.toJsonStringConverter = toJsonStringConverter;
-        this.toTupleConverter = toTupleConverter;
 
     }
 
@@ -41,7 +39,7 @@ public class DomainEventService {
 
         log.debug( "processDomainEvent : boardUuid=" + boardUuid );
 
-        return domainEventsRepository.findById( boardUuid )
+        return this.domainEventsRepository.findById( boardUuid )
                 .map( DomainEventsEntity::toModel )
                 .orElseThrow( IllegalArgumentException::new );
     }

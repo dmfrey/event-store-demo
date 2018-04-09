@@ -1,0 +1,12 @@
+{
+  "boardUuid": "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2",
+  "domainEvents": [
+    {"eventType":"BoardInitialized","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z"},
+    {"eventType":"BoardRenamed","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z", "name": "My Board"},
+    {"eventType":"StoryAdded","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z", "storyUuid": "cf06e86b-046c-407f-8a5e-7212c87499f2", "name": "Story 1"},
+    {"eventType":"StoryAdded","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z", "storyUuid": "d5466d21-b78d-4640-8528-b950b8667bfb", "name": "Story 2"},
+    {"eventType":"StoryUpdated","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z", "storyUuid": "cf06e86b-046c-407f-8a5e-7212c87499f2", "name": "Updated Story 1"},
+    {"eventType":"StoryUpdated","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z", "storyUuid": "d5466d21-b78d-4640-8528-b950b8667bfb", "name": "Updated Story 2"},
+    {"eventType":"StoryDeleted","boardUuid":"ff4795e1-2514-4f5a-90e2-cd33dfadfbf2","occurredOn":"2018-02-23T03:49:52.313Z", "storyUuid": "d5466d21-b78d-4640-8528-b950b8667bfb"}
+  ]
+}

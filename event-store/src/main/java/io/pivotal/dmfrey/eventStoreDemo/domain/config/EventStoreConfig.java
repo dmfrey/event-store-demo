@@ -14,10 +14,10 @@ public class EventStoreConfig {
     @Bean
     public DomainEventService domainEventService(
             final DomainEventsRepository domainEventsRepository, final NotificationPublisher publisher,
-            final TupleToJsonStringConverter tupleToJsonStringConverter, final JsonStringToTupleConverter jsonStringToTupleConverter
+            final TupleToJsonStringConverter tupleToJsonStringConverter
     ) {
 
-        return new DomainEventService( domainEventsRepository, publisher, tupleToJsonStringConverter, jsonStringToTupleConverter );
+        return new DomainEventService( domainEventsRepository, publisher, tupleToJsonStringConverter );
     }
 
 }

@@ -32,8 +32,8 @@ public class EventStoreBoardClientTests {
     @MockBean( name = "io.pivotal.dmfrey.eventStoreDemo.domain.client.eventStore.config.RestConfig$EventStoreClient" )
     private RestConfig.EventStoreClient eventStoreClient;
 
-    UUID boardUuid = UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" );
-    UUID storyUuid = UUID.fromString( "242500df-373e-4e70-90bc-3c8cd54c81d8" );
+    private UUID boardUuid = UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" );
+    private UUID storyUuid = UUID.fromString( "242500df-373e-4e70-90bc-3c8cd54c81d8" );
 
     @Test
     public void testFind() throws Exception {

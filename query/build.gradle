@@ -22,6 +22,7 @@ dependencies {
     // Test dependencies
     testCompile('org.springframework.cloud:spring-cloud-stream-binder-test:2.0.0.RC2')
     testCompile('org.springframework.kafka:spring-kafka-test')
+    testCompile 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
 
 }
 

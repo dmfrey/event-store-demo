@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode( callSuper = true )
 @ToString( callSuper = true )
-@JsonPropertyOrder({ "eventType", "boardUuid", "occurredOn", "storyUuid" })
+@JsonPropertyOrder({ "eventType", "boardUuid", "occurredOn", "storyUuid", "name" })
 public class StoryUpdated extends DomainEvent {
 
     private final UUID storyUuid;

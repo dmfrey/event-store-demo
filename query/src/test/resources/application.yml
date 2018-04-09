@@ -5,6 +5,16 @@ spring:
   cloud:
     stream:
       default-binder: rabbit
+      bindings:
+        input:
+          binder: rabbit
+          destination: board-event-notifications
+          contentType: application/json
+          consumer:
+            headerMode: raw # Outbound data has no embedded headers
+
+logging.level:
+  org.springframework.cloud.stream: DEBUG
 
 
 ---

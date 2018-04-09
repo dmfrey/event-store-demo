@@ -1,5 +1,6 @@
-package io.pivotal.dmfrey.eventStoreDemo.domain.service;
+package io.pivotal.dmfrey.eventStoreDemo.domain.client.eventStore.service;
 
+import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @RunWith( SpringRunner.class )
 @SpringBootTest(
         properties = {
-                "--spring.cloud.service-registry.auto-registration.enabled=false"
+                "spring.cloud.service-registry.auto-registration.enabled=false"
         }
 )
 @ActiveProfiles( "event-store" )
