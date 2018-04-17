@@ -3,7 +3,6 @@ package io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvent;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -23,7 +22,6 @@ import static io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaC
 
 @Profile( "kafka" )
 @EnableBinding( BoardEventsStreamsProcessor.class )
-@Slf4j
 public class DomainEventSinkImpl implements DomainEventSink {
 
     private final ObjectMapper mapper;
@@ -40,7 +38,6 @@ public class DomainEventSinkImpl implements DomainEventSink {
 
     @StreamListener( "input" )
     public void process( KStream<Object, byte[]> input ) {
-        log.debug( "process : enter" );
 
         input
                 .map( (key, value) -> {
@@ -48,12 +45,11 @@ public class DomainEventSinkImpl implements DomainEventSink {
                     try {
 
                         DomainEvent domainEvent = mapper.readValue( value, DomainEvent.class );
-                        log.debug( "process : domainEvent=" + domainEvent );
 
                         return new KeyValue<>( domainEvent.getBoardUuid().toString(), domainEvent );
 
                     } catch( IOException e ) {
-                        log.error( "process : error converting json to DomainEvent", e );
+                        e.printStackTrace();
                     }
 
                     return null;
@@ -67,7 +63,6 @@ public class DomainEventSinkImpl implements DomainEventSink {
                             .withValueSerde( boardSerde )
                 );
 
-        log.debug( "process : exit" );
     }
 
 }

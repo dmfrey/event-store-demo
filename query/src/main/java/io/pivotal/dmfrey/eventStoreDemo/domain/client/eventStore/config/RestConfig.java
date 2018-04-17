@@ -24,12 +24,6 @@ public class RestConfig {
 
     }
 
-//    @Bean
-//    public HystrixFallbackEventStoreClient hystrixFallbackEventStoreClient() {
-//
-//        return new HystrixFallbackEventStoreClient();
-//    }
-
     @Component
     static class HystrixFallbackEventStoreClient implements EventStoreClient {
 

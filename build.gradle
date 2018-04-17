@@ -3,7 +3,7 @@ buildscript {
     ext {
 
         springBootVersion = '2.0.1.RELEASE'
-        springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
+        springCloudVersion = 'Finchley.M9'
         springCloudContractVersion = '2.0.0.M8'
 
     }
@@ -56,7 +56,7 @@ subprojects {
 
     ext {
 
-        springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
+        springCloudVersion = 'Finchley.M9'
 
     }
 
@@ -113,7 +113,7 @@ subprojects {
         testLogging {
 
             showStandardStreams = true
-            events 'started', 'passed', 'failed'
+//            events 'started', 'passed', 'failed'
 
         }
 
@@ -131,7 +131,7 @@ subprojects {
 
         description 'Used for running unit tests.'
 
-        include '**/**Tests.class'
+//        include '**/**Tests.class'
 
     }
 

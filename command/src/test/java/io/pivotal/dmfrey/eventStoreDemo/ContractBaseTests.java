@@ -38,7 +38,7 @@ public abstract class ContractBaseTests {
     private BoardService service;
 
     private UUID boardUuid = UUID.fromString( "11111111-90ab-cdef-1234-567890abcdef" );
-    private UUID storyUuid = UUID.fromString( "22222222-90ab-cdef-1234-567890abcdef" );
+    private UUID storyUuid = UUID.fromString( "10240df9-4a1e-4fa4-bbd1-0bb33d764603" );
 
     @Before
     public void setup() {

@@ -18,7 +18,7 @@ Contract.make {
 
         headers {
             header([
-                    Location: "${fromRequest().path().serverValue}/" + anyUuid().clientValue
+                    Location: "http://localhost/boards/11111111-90ab-cdef-1234-567890abcdef"
             ])
         }
 

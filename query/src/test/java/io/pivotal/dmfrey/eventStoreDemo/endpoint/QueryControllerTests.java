@@ -5,25 +5,32 @@ import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith( SpringRunner.class )
-@WebMvcTest( QueryController.class )
+@SpringBootTest( webEnvironment = MOCK,
+        properties = {
+                "spring.cloud.service-registry.auto-registration.enabled=false"
+        }
+)
+@AutoConfigureMockMvc
 public class QueryControllerTests {
 
     @Autowired
@@ -41,8 +48,8 @@ public class QueryControllerTests {
         this.mockMvc.perform( get( "/boards/{boardUuid}", board.getBoardUuid() ) )
                 .andExpect( status().isOk() )
                 .andDo( print() )
-                .andExpect( jsonPath( "$.name", is( equalTo( board.getName() ) ) ) )
-                .andExpect( jsonPath( "$.backlog", is( nullValue() ) ) );
+                .andExpect( jsonPath( "$.name", is( board.getName() ) ) )
+                .andExpect( jsonPath( "$.backlog", is( notNullValue() ) ) );
 
         verify( this.service, times( 1 ) ).find( any( UUID.class ) );
         verifyNoMoreInteractions( this.service );
@@ -51,10 +58,7 @@ public class QueryControllerTests {
 
     private Board createBoard() {
 
-        Board board = new Board();
-        board.setBoardUuid( UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" ) );
-
-        return board;
+        return new Board( UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" ) );
     }
 
 }

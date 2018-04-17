@@ -20,7 +20,9 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 @RunWith( SpringRunner.class )
-@SpringBootTest
+@SpringBootTest( properties = {
+        "spring.cloud.service-registry.auto-registration.enabled=false"
+})
 @ActiveProfiles( "event-store" )
 public class EventStoreBoardClientTests {
 
@@ -46,6 +48,18 @@ public class EventStoreBoardClientTests {
         assertThat( found.getBoardUuid() ).isEqualTo( domainEvents.getBoardUuid() );
         assertThat( found.getName() ).isEqualTo( "New Board" );
         assertThat( found.getStories() ).hasSize( 0 );
+
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verifyNoMoreInteractions( this.eventStoreClient );
+
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void testFindNotFound() throws Exception {
+
+        when( this.eventStoreClient.getDomainEventsForBoardUuid( any( UUID.class ) ) ).thenReturn( null );
+
+        this.client.find( boardUuid );
 
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
         verifyNoMoreInteractions( this.eventStoreClient );
@@ -134,6 +148,14 @@ public class EventStoreBoardClientTests {
         verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
         verifyNoMoreInteractions( this.eventStoreClient );
 
+    }
+
+    @Test
+    public void testRemoveFromCache() throws Exception {
+
+        this.client.removeFromCache( UUID.randomUUID() );
+
+        verifyZeroInteractions( this.eventStoreClient );
     }
 
     private DomainEvents createDomainEvents() {

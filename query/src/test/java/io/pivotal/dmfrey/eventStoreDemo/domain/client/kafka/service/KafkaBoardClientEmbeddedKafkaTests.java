@@ -28,6 +28,9 @@ import java.util.UUID;
 import static io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaClientConfig.BOARD_EVENTS_SNAPSHOTS;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @Slf4j
 public class KafkaBoardClientEmbeddedKafkaTests {
@@ -81,6 +84,7 @@ public class KafkaBoardClientEmbeddedKafkaTests {
                 "--spring.profiles.active=kafka",
                 "--spring.jackson.serialization.write_dates_as_timestamps=false",
                 "--logger.level.io.pivotal.dmfrey=DEBUG");
+
         try {
 
             receiveAndValidateBoard( context );
@@ -90,6 +94,30 @@ public class KafkaBoardClientEmbeddedKafkaTests {
             context.close();
 
         }
+
+    }
+
+    @Test( expected = UnsupportedOperationException.class )
+    public void testRemoveFromCache() throws Exception {
+
+        SpringApplication app = new SpringApplication( Application.class );
+        app.setWebApplicationType( WebApplicationType.NONE );
+        ConfigurableApplicationContext context = app.run("--server.port=0",
+                "--spring.cloud.service-registry.auto-registration.enabled=false",
+                "--spring.jmx.enabled=false",
+                "--spring.cloud.stream.bindings.input.destination=board-events",
+                "--spring.cloud.stream.bindings.output.destination=board-events",
+                "--spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms=1000",
+                "--spring.cloud.stream.bindings.output.producer.headerMode=raw",
+                "--spring.cloud.stream.bindings.input.consumer.headerMode=raw",
+                "--spring.cloud.stream.kafka.streams.binder.brokers=" + embeddedKafka.getBrokersAsString(),
+                "--spring.cloud.stream.kafka.streams.binder.zkNodes=" + embeddedKafka.getZookeeperConnectionString(),
+                "--spring.profiles.active=kafka",
+                "--spring.jackson.serialization.write_dates_as_timestamps=false",
+                "--logger.level.io.pivotal.dmfrey=DEBUG");
+
+        BoardClient boardClient = context.getBean( "boardClient", BoardClient.class );
+        boardClient.removeFromCache( UUID.randomUUID() );
 
     }
 

@@ -42,8 +42,8 @@ public abstract class ContractBaseTests {
     private BoardService service;
 
     private String boardUuid = "11111111-90ab-cdef-1234-567890abcdef";
-    private String storyOneUuid = "22222222-90ab-cdef-1234-567890abcdef";
-    private String storyTwoUuid = "33333333-90ab-cdef-1234-567890abcdef";
+    private String storyOneUuid = "10240df9-4a1e-4fa4-bbd1-0bb33d764603";
+    private String storyTwoUuid = "6f9b00bd-e47a-47ff-84e6-fc0171d0bc89";
 
     @Before
     public void setup() {

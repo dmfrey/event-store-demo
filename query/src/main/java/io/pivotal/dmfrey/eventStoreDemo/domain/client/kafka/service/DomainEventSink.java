@@ -4,6 +4,6 @@ import org.apache.kafka.streams.kstream.KStream;
 
 public interface DomainEventSink {
 
-    void process(KStream<Object, byte[]> input);
+    void process( KStream<Object, byte[]> input );
 
 }

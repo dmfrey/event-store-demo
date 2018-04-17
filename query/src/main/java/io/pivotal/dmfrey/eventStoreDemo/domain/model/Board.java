@@ -3,8 +3,9 @@ package io.pivotal.dmfrey.eventStoreDemo.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.*;
 import io.vavr.API;
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -16,14 +17,19 @@ import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
 import static io.vavr.collection.Stream.ofAll;
+import static lombok.AccessLevel.NONE;
 
 @Data
-@Slf4j
 @JsonIgnoreProperties( ignoreUnknown = true )
 public class Board {
 
+    @Setter( NONE )
     private UUID boardUuid;
+
+    @Setter( NONE )
     private String name = "New Board";
+
+    @Setter( NONE )
     private Map<UUID, Story> stories = new HashMap<>();
 
     public Board() { }
@@ -35,7 +41,6 @@ public class Board {
     }
 
     private Board boardInitialized( final BoardInitialized event ) {
-        log.debug( "boardInitialized : event=" + event );
 
         this.boardUuid = event.getBoardUuid();
 
@@ -43,7 +48,6 @@ public class Board {
     }
 
     private Board boardRenamed( final BoardRenamed event ) {
-        log.debug( "boardRenamed : event=" + event );
 
         this.name = event.getName();
 
@@ -51,7 +55,6 @@ public class Board {
     }
 
     private Board storyAdded( final StoryAdded event ) {
-        log.debug( "storyAdded : event=" + event );
 
         this.stories.put( event.getStoryUuid(), event.getStory() );
 
@@ -59,7 +62,6 @@ public class Board {
     }
 
     private Board storyUpdated( final StoryUpdated event ) {
-        log.debug( "storyUpdated : event=" + event );
 
         this.stories.replace( event.getStoryUuid(), event.getStory() );
 
@@ -67,7 +69,6 @@ public class Board {
     }
 
     private Board storyDeleted( final StoryDeleted event ) {
-        log.debug( "storyDeleted : event=" + event );
 
         this.stories.remove( event.getStoryUuid() );
 

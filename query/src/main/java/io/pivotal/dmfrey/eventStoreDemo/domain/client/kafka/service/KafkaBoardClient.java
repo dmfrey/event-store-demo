@@ -1,20 +1,16 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.service;
 
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
-import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvent;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.errors.InvalidStateStoreException;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.springframework.cloud.stream.binder.kafka.streams.QueryableStoreRegistry;
 
-import java.util.List;
 import java.util.UUID;
 
 import static io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaClientConfig.BOARD_EVENTS_SNAPSHOTS;
 
-@Slf4j
 public class KafkaBoardClient implements BoardClient {
 
     private final QueryableStoreRegistry queryableStoreRegistry;
@@ -29,7 +25,6 @@ public class KafkaBoardClient implements BoardClient {
 
     @Override
     public Board find( final UUID boardUuid ) {
-        log.debug( "find : enter" );
 
         try {
 
@@ -38,9 +33,6 @@ public class KafkaBoardClient implements BoardClient {
             Board board = store.get( boardUuid.toString() );
             if( null != board ) {
 
-                log.debug( "find : board=" + board.toString() );
-
-                log.debug( "find : exit" );
                 return board;
 
             } else {
@@ -49,7 +41,7 @@ public class KafkaBoardClient implements BoardClient {
             }
 
         } catch( InvalidStateStoreException e ) {
-            log.error( "find : error", e );
+            e.printStackTrace();
 
         }
 
@@ -57,7 +49,7 @@ public class KafkaBoardClient implements BoardClient {
     }
 
     @Override
-    public void removeFromCache(UUID boardUuid) {
+    public void removeFromCache( final UUID boardUuid ) {
 
         throw new UnsupportedOperationException( "this method is not implemented in kafka client" );
     }

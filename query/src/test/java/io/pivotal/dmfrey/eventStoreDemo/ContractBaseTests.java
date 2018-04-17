@@ -1,5 +1,8 @@
 package io.pivotal.dmfrey.eventStoreDemo;
 
+import io.pivotal.dmfrey.eventStoreDemo.domain.events.BoardInitialized;
+import io.pivotal.dmfrey.eventStoreDemo.domain.events.BoardRenamed;
+import io.pivotal.dmfrey.eventStoreDemo.domain.events.StoryAdded;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Story;
 import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
@@ -14,6 +17,8 @@ import org.springframework.cloud.contract.verifier.messaging.MessageVerifier;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -53,23 +58,13 @@ public abstract class ContractBaseTests {
 
     private Board createBoard() {
 
-        Board board = new Board();
-        board.setName( "My Board" );
+        UUID boardUuid = UUID.randomUUID();
+        BoardInitialized boardInitialized = new BoardInitialized( boardUuid, Instant.now() );
+        BoardRenamed boardRenamed = new BoardRenamed( "My Board", boardUuid, Instant.now() );
+        StoryAdded storyAdded1 = new StoryAdded( UUID.fromString( "10240df9-4a1e-4fa4-bbd1-0bb33d764603" ), "Story 1", boardUuid, Instant.now() );
+        StoryAdded storyAdded2 = new StoryAdded( UUID.fromString( "6f9b00bd-e47a-47ff-84e6-fc0171d0bc89" ), "Story 2", boardUuid, Instant.now() );
 
-        Map<UUID, Story> stories = new HashMap<>();
-        Story story1 = new Story();
-        story1.setStoryUuid( UUID.fromString( "10240df9-4a1e-4fa4-bbd1-0bb33d764603" ) );
-        story1.setName( "Story 1" );
-        stories.put( story1.getStoryUuid(), story1 );
-
-        Story story2 = new Story();
-        story2.setStoryUuid( UUID.fromString( "6f9b00bd-e47a-47ff-84e6-fc0171d0bc89" ) );
-        story2.setName( "Story 2" );
-        stories.put( story2.getStoryUuid(), story2 );
-
-        board.setStories( stories );
-
-        return board;
+        return Board.createFrom( boardUuid, Arrays.asList( boardInitialized, boardRenamed, storyAdded1, storyAdded2 ) );
     }
 
 }

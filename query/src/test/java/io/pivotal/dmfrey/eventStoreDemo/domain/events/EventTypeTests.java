@@ -30,6 +30,7 @@ public class EventTypeTests {
 
         StoryAdded event = new StoryAdded( UUID.randomUUID(),"Story 1", UUID.randomUUID(), Instant.now() );
         assertThat( event.eventType() ).isEqualTo( "StoryAdded" );
+        assertThat( event.getName() ).isEqualTo( "Story 1" );
 
     }
 
@@ -38,6 +39,7 @@ public class EventTypeTests {
 
         StoryUpdated event = new StoryUpdated( UUID.randomUUID(),"Updated Story 1", UUID.randomUUID(), Instant.now() );
         assertThat( event.eventType() ).isEqualTo( "StoryUpdated" );
+        assertThat( event.getName() ).isEqualTo( "Updated Story 1" );
 
     }
 

@@ -1,7 +1,6 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.client.eventStore.service;
 
 import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -14,7 +13,6 @@ import java.util.UUID;
 
 @Profile( "event-store" )
 @EnableBinding( Sink.class )
-@Slf4j
 public class BoardEventNotificationSink {
 
     private final BoardService service;
@@ -26,7 +24,6 @@ public class BoardEventNotificationSink {
 
     @StreamListener( Sink.INPUT )
     public void processNotification( final String json ) {
-        log.debug( "processNotification : enter" );
 
         Tuple event = TupleBuilder.fromString( json );
 
@@ -36,14 +33,12 @@ public class BoardEventNotificationSink {
 
         String eventType = event.getString( "eventType" );
         if( eventType.equals( "BoardInitialized" ) ) {
-            log.debug( "processNotification : exit, no board should exist in cache if 'BoardInitialized' event is received" );
 
             return;
         }
 
         this.service.uncacheTarget( UUID.fromString( event.getString( "boardUuid" ) ) );
 
-        log.debug( "processNotification : exit" );
     }
 
 }
