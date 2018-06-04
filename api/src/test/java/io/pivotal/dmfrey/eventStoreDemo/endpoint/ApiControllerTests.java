@@ -44,10 +44,12 @@ public class ApiControllerTests {
     @MockBean
     BoardService service;
 
+    private UUID boardUuid = UUID.randomUUID();
+    private UUID storyUuid = UUID.randomUUID();
+
     @Test
     public void testCreateBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
         when( this.service.createBoard() ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + boardUuid.toString() ) ).build() );
 
         this.mockMvc.perform( post( "/boards" ) )
@@ -64,7 +66,6 @@ public class ApiControllerTests {
     @Test
     public void testRenameBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
         when( this.service.renameBoard( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
 
         this.mockMvc.perform( patch( "/boards/{boardUuid}", boardUuid ).param( "name", "Test Board" ) )
@@ -79,7 +80,7 @@ public class ApiControllerTests {
                         )
                 ));
 
-        verify( this.service, times( 1 ) ).renameBoard( any( UUID.class ), anyString() );
+        verify( this.service, times( 1 ) ).renameBoard( boardUuid, "Test Board" );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -87,8 +88,6 @@ public class ApiControllerTests {
     @Test
     public void testCreateStoryOnBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
         when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.created( URI.create( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ).build() );
 
         this.mockMvc.perform( post( "/boards/{boardUuid}/stories", boardUuid ).param( "name", "Test Story" ) )
@@ -104,7 +103,7 @@ public class ApiControllerTests {
                         )
                 ));
 
-        verify( this.service, times( 1 ) ).addStory( any( UUID.class ), anyString() );
+        verify( this.service, times( 1 ) ).addStory( boardUuid, "Test Story" );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -112,8 +111,6 @@ public class ApiControllerTests {
     @Test
     public void testUpdateStoryOnBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
         when( this.service.updateStory( any( UUID.class ), any( UUID.class ), anyString() ) ).thenReturn( ResponseEntity.accepted().build() );
 
         this.mockMvc.perform( put( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ).param( "name", "Test Story Updated" ) )
@@ -130,7 +127,7 @@ public class ApiControllerTests {
                 ));
 
 
-        verify( this.service, times( 1 ) ).updateStory( any( UUID.class ), any( UUID.class ), anyString() );
+        verify( this.service, times( 1 ) ).updateStory( boardUuid, storyUuid, "Test Story Updated" );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -138,8 +135,6 @@ public class ApiControllerTests {
     @Test
     public void testDeleteStoryOnBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
         when( this.service.deleteStory( any( UUID.class ), any( UUID.class ) ) ).thenReturn( ResponseEntity.accepted().build() );
 
         this.mockMvc.perform( RestDocumentationRequestBuilders.delete( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ) )
@@ -152,7 +147,7 @@ public class ApiControllerTests {
                         )
                 ));
 
-        verify( this.service, times( 1 ) ).deleteStory( any( UUID.class ), any( UUID.class ) );
+        verify( this.service, times( 1 ) ).deleteStory( boardUuid, storyUuid );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -162,7 +157,7 @@ public class ApiControllerTests {
 
         when( this.service.board( any( UUID.class ) ) ).thenReturn( new ResponseEntity<>( craeteBoard(), HttpStatus.OK ) );
 
-        this.mockMvc.perform( get( "/boards/{boardUuid}", UUID.randomUUID() ) )
+        this.mockMvc.perform( get( "/boards/{boardUuid}", boardUuid ) )
                 .andExpect( status().isOk() )
                 .andDo( print() )
                 .andExpect( jsonPath( "$.name", is( equalTo( "My Board" ) ) ) )
@@ -174,7 +169,7 @@ public class ApiControllerTests {
                 ));
 
 
-        verify( this.service, times( 1 ) ).board( any( UUID.class ) );
+        verify( this.service, times( 1 ) ).board( boardUuid );
         verifyNoMoreInteractions( this.service );
 
     }

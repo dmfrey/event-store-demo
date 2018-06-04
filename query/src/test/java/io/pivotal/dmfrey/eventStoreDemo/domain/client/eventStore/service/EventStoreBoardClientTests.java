@@ -49,7 +49,7 @@ public class EventStoreBoardClientTests {
         assertThat( found.getName() ).isEqualTo( "New Board" );
         assertThat( found.getStories() ).hasSize( 0 );
 
-        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( boardUuid );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -61,7 +61,7 @@ public class EventStoreBoardClientTests {
 
         this.client.find( boardUuid );
 
-        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( boardUuid );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -79,7 +79,7 @@ public class EventStoreBoardClientTests {
         assertThat( found.getName() ).isEqualTo( "My Board" );
         assertThat( found.getStories() ).hasSize( 0 );
 
-        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( boardUuid );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -101,7 +101,7 @@ public class EventStoreBoardClientTests {
                 .containsKey( storyUuid )
                 .containsValue( createStoryAddedEvent().getStory() );
 
-        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( boardUuid );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -124,7 +124,7 @@ public class EventStoreBoardClientTests {
                 .containsKey( storyUuid )
                 .containsValue( createStoryUpdatedEvent().getStory() );
 
-        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( boardUuid );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -145,7 +145,7 @@ public class EventStoreBoardClientTests {
         assertThat( found.getName() ).isEqualTo( "My Board" );
         assertThat( found.getStories() ).hasSize( 0 );
 
-        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( any( UUID.class ) );
+        verify( this.eventStoreClient, times( 1 ) ).getDomainEventsForBoardUuid( boardUuid );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -153,7 +153,7 @@ public class EventStoreBoardClientTests {
     @Test
     public void testRemoveFromCache() throws Exception {
 
-        this.client.removeFromCache( UUID.randomUUID() );
+        this.client.removeFromCache( boardUuid );
 
         verifyZeroInteractions( this.eventStoreClient );
     }

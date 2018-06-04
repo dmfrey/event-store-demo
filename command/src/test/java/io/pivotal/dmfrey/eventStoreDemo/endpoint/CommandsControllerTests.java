@@ -32,10 +32,12 @@ public class CommandsControllerTests {
     @MockBean
     BoardService service;
 
+    private UUID boardUuid = UUID.randomUUID();
+    private UUID storyUuid = UUID.randomUUID();
+
     @Test
     public void testCreateBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
         when( this.service.createBoard() ).thenReturn( boardUuid );
 
         this.mockMvc.perform( post( "/boards" ).param( "name", "Test Board" ) )
@@ -51,13 +53,11 @@ public class CommandsControllerTests {
     @Test
     public void testRenameBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-
         this.mockMvc.perform( patch( "/boards/{boardUuid}", boardUuid ).param( "name", "Test Board" ) )
                 .andDo( print() )
                 .andExpect( status().isAccepted() );;
 
-        verify( this.service, times( 1 ) ).renameBoard( any( UUID.class ), anyString() );
+        verify( this.service, times( 1 ) ).renameBoard( boardUuid, "Test Board" );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -65,8 +65,6 @@ public class CommandsControllerTests {
     @Test
     public void testCreateStoryOnBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
         when( this.service.addStory( any( UUID.class ), anyString() ) ).thenReturn( storyUuid );
 
         this.mockMvc.perform( post( "/boards/{boardUuid}/stories", boardUuid ).param( "name", "Test Story" ) )
@@ -74,7 +72,7 @@ public class CommandsControllerTests {
                 .andExpect( status().isCreated() )
                 .andExpect( header().string( HttpHeaders.LOCATION, is( equalTo( "http://localhost/boards/" + boardUuid.toString() + "/stories/" + storyUuid.toString() ) ) ) );
 
-        verify( this.service, times( 1 ) ).addStory( any( UUID.class ), anyString() );
+        verify( this.service, times( 1 ) ).addStory( boardUuid, "Test Story" );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -82,14 +80,11 @@ public class CommandsControllerTests {
     @Test
     public void testUpdateStoryOnBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
-
         this.mockMvc.perform( put( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ).param( "name", "Test Story Updated" ) )
                 .andDo( print() )
                 .andExpect( status().isAccepted() );
 
-        verify( this.service, times( 1 ) ).updateStory( any( UUID.class ), any( UUID.class ), anyString() );
+        verify( this.service, times( 1 ) ).updateStory( boardUuid, storyUuid, "Test Story Updated" );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -97,14 +92,11 @@ public class CommandsControllerTests {
     @Test
     public void testDeleteStoryOnBoard() throws Exception {
 
-        UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
-
         this.mockMvc.perform( delete( "/boards/{boardUuid}/stories/{storyUuid}", boardUuid, storyUuid ) )
                 .andDo( print() )
                 .andExpect( status().isAccepted() );
 
-        verify( this.service, times( 1 ) ).deleteStory( any( UUID.class ), any( UUID.class ) );
+        verify( this.service, times( 1 ) ).deleteStory( boardUuid, storyUuid );
         verifyNoMoreInteractions( this.service );
 
     }

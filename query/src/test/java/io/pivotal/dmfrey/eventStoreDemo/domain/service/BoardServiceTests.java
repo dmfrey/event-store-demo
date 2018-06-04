@@ -25,6 +25,8 @@ public class BoardServiceTests {
     @MockBean
     private BoardClient client;
 
+    private UUID boardUuid = UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" );
+
     @Test
     public void testFind() throws Exception {
 
@@ -37,7 +39,7 @@ public class BoardServiceTests {
         assertThat( found.getName() ).isEqualTo( found.getName() );
         assertThat( found.getStories() ).hasSize( 0 );
 
-        verify( this.client, times( 1 ) ).find( any( UUID.class ) );
+        verify( this.client, times( 1 ) ).find( boardUuid );
         verifyNoMoreInteractions( this.client );
 
     }
@@ -57,16 +59,16 @@ public class BoardServiceTests {
     @Test
     public void testRemoveFromCache() throws Exception {
 
-        this.service.uncacheTarget( UUID.randomUUID() );
+        this.service.uncacheTarget( boardUuid );
 
-        verify( this.client ).removeFromCache( any( UUID.class ) );
+        verify( this.client ).removeFromCache( boardUuid );
         verifyNoMoreInteractions( this.client );
 
     }
 
     private Board createBoard() {
 
-        return new Board( UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" ) );
+        return new Board( boardUuid );
     }
 
 }

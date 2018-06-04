@@ -38,13 +38,16 @@ public class EventStoreBoardClientTests {
     public void testSave() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        Board board = createTestBoard( boardUuid );
+        Instant now = Instant.now();
+        Board board = createTestBoard( boardUuid, now );
 
         when( this.eventStoreClient.addNewDomainEvent( any( DomainEvent.class ) ) ).thenReturn( ResponseEntity.accepted().build() );
 
         this.boardClient.save( board );
 
-        verify( this.eventStoreClient, times( 1 ) ).addNewDomainEvent( any( DomainEvent.class ) );
+        BoardInitialized expectedEvent = new BoardInitialized( boardUuid, now );
+
+        verify( this.eventStoreClient, times( 1 ) ).addNewDomainEvent( expectedEvent );
         verifyNoMoreInteractions( this.eventStoreClient );
 
     }
@@ -53,7 +56,8 @@ public class EventStoreBoardClientTests {
     public void testSaveNotAccepted() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        Board board = createTestBoard( boardUuid );
+        Instant now = Instant.now();
+        Board board = createTestBoard( boardUuid, now );
 
         when( this.eventStoreClient.addNewDomainEvent( any( DomainEvent.class ) ) ).thenReturn( ResponseEntity.unprocessableEntity().build() );
 
@@ -107,9 +111,10 @@ public class EventStoreBoardClientTests {
         return new BoardInitialized( boardUuid, Instant.now() );
     }
 
-    private Board createTestBoard( final UUID boardUuid ) {
+    private Board createTestBoard( final UUID boardUuid, final Instant ts ) {
 
         Board board = new Board( boardUuid );
+        board.initialize( ts );
         assertThat( board ).isNotNull();
         assertThat( board.getBoardUuid() ).isEqualTo( boardUuid );
         assertThat( board.getName() ).isEqualTo( "New Board" );

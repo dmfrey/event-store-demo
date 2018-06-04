@@ -25,10 +25,9 @@ public class QueryController {
     public ResponseEntity board( @PathVariable( "boardUuid" ) UUID boardUuid ) {
 
         Board board = this.service.find( boardUuid );
-        ResponseEntity responseEntity = ResponseEntity
-                .ok( BoardModel.fromBoard( board ) );
 
-        return responseEntity;
+        return ResponseEntity
+                .ok( BoardModel.fromBoard( board ) );
     }
 
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.*;
 import io.vavr.API;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,23 +40,28 @@ public class Board {
 
     public Board( final UUID boardUuid ) {
 
-        boardInitialized( new BoardInitialized( boardUuid, Instant.now() ) );
+        this.boardUuid = boardUuid;
+
+    }
+
+    public void initialize( final Instant ts ) {
+
+        boardInitialized( new BoardInitialized( boardUuid, ts ) );
 
     }
 
     private Board boardInitialized( final BoardInitialized event ) {
         log.debug( "boardInitialized : event=" + event );
 
-        flushChanges();
         this.boardUuid = event.getBoardUuid();
         this.changes.add( event );
 
         return this;
     }
 
-    public void renameBoard( final String name ) {
+    public void renameBoard( final String name, final Instant ts ) {
 
-        boardRenamed( new BoardRenamed( name, this.boardUuid, Instant.now() ) );
+        boardRenamed( new BoardRenamed( name, this.boardUuid, ts ) );
 
     }
 
@@ -75,9 +79,9 @@ public class Board {
         return this.name;
     }
 
-    public void addStory( final UUID storyUuid, final String name ) {
+    public void addStory( final UUID storyUuid, final String name, final Instant ts ) {
 
-        storyAdded( new StoryAdded( storyUuid, name, this.boardUuid, Instant.now() ) );
+        storyAdded( new StoryAdded( storyUuid, name, this.boardUuid, ts ) );
 
     }
 
@@ -90,9 +94,9 @@ public class Board {
         return this;
     }
 
-    public void updateStory( final UUID storyUuid, final String name ) {
+    public void updateStory( final UUID storyUuid, final String name, final Instant ts ) {
 
-        storyUpdated( new StoryUpdated( storyUuid, name, this.boardUuid, Instant.now() ) );
+        storyUpdated( new StoryUpdated( storyUuid, name, this.boardUuid, ts ) );
 
     }
 
@@ -105,9 +109,9 @@ public class Board {
         return this;
     }
 
-    public void deleteStory( final UUID storyUuid ) {
+    public void deleteStory( final UUID storyUuid, final Instant ts ) {
 
-        storyDeleted( new StoryDeleted( storyUuid, this.boardUuid, Instant.now() ) );
+        storyDeleted( new StoryDeleted( storyUuid, this.boardUuid, ts ) );
 
     }
 

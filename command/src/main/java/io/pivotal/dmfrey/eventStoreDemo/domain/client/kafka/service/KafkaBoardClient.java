@@ -51,8 +51,6 @@ public class KafkaBoardClient implements BoardClient {
     public Board find( final UUID boardUuid ) {
         log.debug( "find : enter" );
 
-//        while( true ) {
-
             try {
 
                 ReadOnlyKeyValueStore<String, Board> store = queryableStoreRegistry.getQueryableStoreType( BOARD_EVENTS_SNAPSHOTS, QueryableStoreTypes.<String, Board>keyValueStore() );
@@ -74,15 +72,7 @@ public class KafkaBoardClient implements BoardClient {
             } catch( InvalidStateStoreException e ) {
                 log.error( "find : error", e );
 
-//                try {
-//                    Thread.sleep( 100 );
-//                } catch( InterruptedException e1 ) {
-//                    log.error( "find : thread interrupted", e1 );
-//                }
-
             }
-
-//        }
 
         throw new IllegalArgumentException( "board[" + boardUuid.toString() + "] not found!" );
     }

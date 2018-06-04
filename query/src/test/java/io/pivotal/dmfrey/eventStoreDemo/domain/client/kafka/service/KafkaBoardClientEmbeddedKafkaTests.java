@@ -26,11 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaClientConfig.BOARD_EVENTS_SNAPSHOTS;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class KafkaBoardClientEmbeddedKafkaTests {
@@ -139,10 +135,10 @@ public class KafkaBoardClientEmbeddedKafkaTests {
         Thread.sleep( 1000 );
 
         Board board = boardClient.find( boardUuid );
-        assertThat( board, is( notNullValue() ) );
-        assertThat( board.getBoardUuid(), is( equalTo( boardUuid ) ) );
-        assertThat( board.getName(), is( equalTo( "New Board" ) ) );
-        assertThat( board.getStories().isEmpty(), is( equalTo( true ) ) );
+        assertThat( board ).isNotNull();
+        assertThat( board.getBoardUuid() ).isEqualTo( boardUuid );
+        assertThat( board.getName() ).isEqualTo( "New Board" );
+        assertThat( board.getStories() ).isEmpty();
 
     }
 

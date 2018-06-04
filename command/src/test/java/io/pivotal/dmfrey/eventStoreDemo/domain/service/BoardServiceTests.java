@@ -2,7 +2,6 @@ package io.pivotal.dmfrey.eventStoreDemo.domain.service;
 
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
-import io.pivotal.dmfrey.eventStoreDemo.domain.model.Story;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,13 +30,31 @@ public class BoardServiceTests {
     @MockBean
     BoardClient client;
 
+    @MockBean( name = "boardKeyGenerator" )
+    KeyGenerator boardKeyGenerator;
+
+    @MockBean( name = "storyKeyGenerator" )
+    KeyGenerator storyKeyGenerator;
+
+    @MockBean
+    TimestampGenerator timestampGenerator;
+
     @Test
     public void testCreateBoard() throws Exception {
 
-        UUID boardUuid = this.service.createBoard();
-        assertThat( boardUuid ).isNotNull();
+        UUID boardUuid = UUID.randomUUID();
+        when( this.boardKeyGenerator.generate() ).thenReturn( boardUuid );
 
-        verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        Instant now = Instant.now();
+        when( this.timestampGenerator.generate() ).thenReturn( now );
+
+        UUID createdUuid = this.service.createBoard();
+        assertThat( createdUuid ).isEqualTo( boardUuid );
+
+        Board expectedBoard = new Board( boardUuid );
+        expectedBoard.initialize( now );
+
+        verify( this.client, times( 1 ) ).save( expectedBoard );
         verifyNoMoreInteractions( this.client );
 
     }
@@ -45,16 +63,21 @@ public class BoardServiceTests {
     public void testRenameBoard() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        Board board = createTestBoard( boardUuid );
+        when( this.boardKeyGenerator.generate() ).thenReturn( boardUuid );
 
-        when( this.client.find( any( UUID.class ) ) ).thenReturn( board );
+        Instant now = Instant.now();
+        when( this.timestampGenerator.generate() ).thenReturn( now );
+
+        Board requestedBoard = createTestBoard( boardUuid, now );
+        when( this.client.find( any( UUID.class ) ) ).thenReturn( requestedBoard );
 
         this.service.renameBoard( boardUuid, "Test Board" );
-        assertThat( board.getName() ).isEqualTo( "Test Board" );
-        assertThat( board.changes() ).hasSize( 2 );
 
-        verify( this.client, times( 1 ) ).find( any( UUID.class ) );
-        verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        Board expectedBoard = createTestBoard( boardUuid, now );
+        expectedBoard.renameBoard( "Test Board", now );
+
+        verify( this.client, times( 1 ) ).find( boardUuid );
+        verify( this.client, times( 1 ) ).save( expectedBoard );
         verifyNoMoreInteractions( this.client );
 
     }
@@ -63,19 +86,26 @@ public class BoardServiceTests {
     public void testAddStoryToBoard() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        Board board = createTestBoard( boardUuid );
+        when( this.boardKeyGenerator.generate() ).thenReturn( boardUuid );
 
-        when( this.client.find( any( UUID.class ) ) ).thenReturn( board );
+        Instant now = Instant.now();
+        when( this.timestampGenerator.generate() ).thenReturn( now );
 
-        UUID storyUuid = this.service.addStory( boardUuid, "Test Story" );
-        assertThat( storyUuid ).isNotNull();
-        assertThat( board.getStories() ).hasSize( 1 )
-                .containsKey( storyUuid )
-                .containsValue( createTestStory( "Test Story" ) );
-        assertThat( board.changes() ).hasSize( 2 );
+        UUID storyUuid = UUID.randomUUID();
+        when( this.storyKeyGenerator.generate() ).thenReturn( storyUuid );
 
-        verify( this.client, times( 1 ) ).find( any( UUID.class ) );
-        verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        Board requestedBoard = createTestBoard( boardUuid, now );
+        when( this.client.find( any( UUID.class ) ) ).thenReturn( requestedBoard );
+
+        UUID createdUuid = this.service.addStory( boardUuid, "Test Story" );
+
+        Board expectedBoard = createTestBoard( boardUuid, now );
+        expectedBoard.addStory( storyUuid, "Test Story", now );
+
+        assertThat( createdUuid ).isEqualTo( storyUuid );
+
+        verify( this.client, times( 1 ) ).find( boardUuid );
+        verify( this.client, times( 1 ) ).save( expectedBoard );
         verifyNoMoreInteractions( this.client );
 
     }
@@ -84,23 +114,26 @@ public class BoardServiceTests {
     public void testUpdateStoryOnBoard() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
-        Board board = createTestBoard( boardUuid );
-        board.addStory( storyUuid, "Test Story" );
-        assertThat( board.getStories() ).hasSize( 1 )
-                .containsKey( storyUuid )
-                .containsValue( createTestStory( "Test Story" ) );
+        when( this.boardKeyGenerator.generate() ).thenReturn( boardUuid );
 
-        when( this.client.find( any( UUID.class ) ) ).thenReturn( board );
+        Instant now = Instant.now();
+        when( this.timestampGenerator.generate() ).thenReturn( now );
+
+        UUID storyUuid = UUID.randomUUID();
+        when( this.storyKeyGenerator.generate() ).thenReturn( storyUuid );
+
+        Board requestedBoard = createTestBoard( boardUuid, now );
+        requestedBoard.addStory( storyUuid, "Test Story", now );
+        when( this.client.find( any( UUID.class ) ) ).thenReturn( requestedBoard );
 
         this.service.updateStory( boardUuid, storyUuid,"Test Story Updated" );
-        assertThat( board.getStories() ).hasSize( 1 )
-                .containsKey( storyUuid )
-                .containsValue( createTestStory( "Test Story Updated" ) );
-        assertThat( board.changes() ).hasSize( 3 );
 
-        verify( this.client, times( 1 ) ).find( any( UUID.class ) );
-        verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        Board expectedBoard = createTestBoard( boardUuid, now );
+        expectedBoard.addStory( storyUuid, "Test Story", now );
+        expectedBoard.updateStory( storyUuid, "Test Story Updated", now );
+
+        verify( this.client, times( 1 ) ).find( boardUuid );
+        verify( this.client, times( 1 ) ).save( expectedBoard );
         verifyNoMoreInteractions( this.client );
 
     }
@@ -109,43 +142,40 @@ public class BoardServiceTests {
     public void testDeleteStoryFromBoard() throws Exception {
 
         UUID boardUuid = UUID.randomUUID();
-        UUID storyUuid = UUID.randomUUID();
-        Board board = createTestBoard( boardUuid );
-        board.addStory( storyUuid, "Test Story" );
-        assertThat( board.getStories() ).hasSize( 1 )
-                .containsKey( storyUuid )
-                .containsValue( createTestStory( "Test Story" ) );
+        when( this.boardKeyGenerator.generate() ).thenReturn( boardUuid );
 
-        when( this.client.find( any( UUID.class ) ) ).thenReturn( board );
+        Instant now = Instant.now();
+        when( this.timestampGenerator.generate() ).thenReturn( now );
+
+        UUID storyUuid = UUID.randomUUID();
+        when( this.storyKeyGenerator.generate() ).thenReturn( storyUuid );
+
+        Board requestedBoard = createTestBoard( boardUuid, now );
+        requestedBoard.addStory( storyUuid, "Test Story", now );
+        when( this.client.find( any( UUID.class ) ) ).thenReturn( requestedBoard );
 
         this.service.deleteStory( boardUuid, storyUuid );
-        assertThat( board.getStories() ).hasSize( 0 )
-                .doesNotContainKey( storyUuid );
-        assertThat( board.changes() ).hasSize( 3 );
 
-        verify( this.client, times( 1 ) ).find( any( UUID.class ) );
-        verify( this.client, times( 1 ) ).save( any( Board.class ) );
+        Board expectedBoard = createTestBoard( boardUuid, now );
+        expectedBoard.addStory( storyUuid, "Test Story", now );
+        expectedBoard.deleteStory( storyUuid, now );
+
+        verify( this.client, times( 1 ) ).find( boardUuid );
+        verify( this.client, times( 1 ) ).save( expectedBoard );
         verifyNoMoreInteractions( this.client );
 
     }
 
-    private Board createTestBoard( final UUID boardUuid ) {
+    private Board createTestBoard( final UUID boardUuid, final Instant ts ) {
 
         Board board = new Board( boardUuid );
+        board.initialize( ts );
         assertThat( board ).isNotNull();
         assertThat( board.getBoardUuid() ).isEqualTo( boardUuid );
         assertThat( board.getName() ).isEqualTo( "New Board" );
         assertThat( board.changes() ).hasSize( 1 );
 
         return board;
-    }
-
-    private Story createTestStory( final String name ) {
-
-        Story story = new Story();
-        story.setName( name );
-
-        return story;
     }
 
 }

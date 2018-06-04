@@ -16,10 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 @RunWith( SpringRunner.class )
 @SpringBootTest(
@@ -42,13 +39,14 @@ public class BoardEventNotificationSinkTests {
     @MockBean
     private BoardService service;
 
+    private UUID boardUuid = UUID.fromString( "ff4795e1-2514-4f5a-90e2-cd33dfadfbf2" );
+
     @Test
     public void testProcessNotificationBoardInitialized() throws Exception {
 
-        Message message = MessageBuilder.withPayload( BOARD_INITIALIZED_EVENT ).setHeader( MessageHeaders.CONTENT_TYPE,"application/x-spring-tuple" ).build();
-        this.channels.input().send( message );
+        this.channels.input().send( new GenericMessage<>( BOARD_INITIALIZED_EVENT ) );
 
-        verify( this.service, times( 0 ) ).uncacheTarget( any( UUID.class ) );
+        verify( this.service, times( 0 ) ).uncacheTarget( boardUuid );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -58,7 +56,7 @@ public class BoardEventNotificationSinkTests {
 
         this.channels.input().send( new GenericMessage<>( BOARD_RENAMED_EVENT ) );
 
-        verify( this.service, times( 1 ) ).uncacheTarget( any( UUID.class ) );
+        verify( this.service, times( 1 ) ).uncacheTarget( boardUuid );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -68,7 +66,7 @@ public class BoardEventNotificationSinkTests {
 
         this.channels.input().send( new GenericMessage<>( STORY_ADDED_EVENT ) );
 
-        verify( this.service, times( 1 ) ).uncacheTarget( any( UUID.class ) );
+        verify( this.service, times( 1 ) ).uncacheTarget( boardUuid );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -78,7 +76,7 @@ public class BoardEventNotificationSinkTests {
 
         this.channels.input().send( new GenericMessage<>( STORY_UPDATED_EVENT ) );
 
-        verify( this.service, times( 1 ) ).uncacheTarget( any( UUID.class ) );
+        verify( this.service, times( 1 ) ).uncacheTarget( boardUuid );
         verifyNoMoreInteractions( this.service );
 
     }
@@ -88,7 +86,7 @@ public class BoardEventNotificationSinkTests {
 
         this.channels.input().send( new GenericMessage<>( STORY_DELETED_EVENT ) );
 
-        verify( this.service, times( 1 ) ).uncacheTarget( any( UUID.class ) );
+        verify( this.service, times( 1 ) ).uncacheTarget( boardUuid );
         verifyNoMoreInteractions( this.service );
 
     }
