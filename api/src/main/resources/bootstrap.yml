@@ -1,3 +1,11 @@
 spring:
   application:
-    name: api
+    name: esd-api
+
+---
+spring:
+  profiles: cloud
+
+  cloud:
+    services:
+      registrationMethod: direct

@@ -1,0 +1,15 @@
+---
+applications:
+- name: esd-api
+  host: esd-api-development
+  buildpack: java_buildpack_offline
+  memory: 1024M
+  instances: 1
+  path: build/libs/api-0.0.1-SNAPSHOT.jar
+  services:
+    - discovery-service
+    - hystrix-dashboard
+    - rabbitmq
+  env:
+    JAVA_OPTS: -Djava.security.egd=file:///dev/urandom
+    SPRING_PROFILES_ACTIVE: event-store

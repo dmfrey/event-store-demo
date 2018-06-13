@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.RELEASE'
+        springBootVersion = '2.0.2.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -8,6 +8,7 @@ buildscript {
         maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
@@ -34,10 +35,12 @@ subprojects {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-milestone" }
     }
 
     ext {
-        springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
+        springCloudVersion = 'Finchley.RC2'
     }
 
     dependencies {
@@ -48,13 +51,16 @@ subprojects {
         // Spring Boot dependencies
         compile('org.springframework.boot:spring-boot-starter-actuator')
         compile('org.springframework.boot:spring-boot-starter-web')
+        compile('org.springframework.boot:spring-boot-starter-security')
 
 
         // Spring Cloud dependencies
         compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+        compile('io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry')
 
 
         // Third-party dependencies
+        compile('com.rabbitmq:amqp-client:5.2.0')
         compile('org.projectlombok:lombok:1.16.18')
         compile('io.vavr:vavr:0.9.2')
 
@@ -68,6 +74,7 @@ subprojects {
 
         imports {
             mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:2.0.0.M1"
         }
 
     }

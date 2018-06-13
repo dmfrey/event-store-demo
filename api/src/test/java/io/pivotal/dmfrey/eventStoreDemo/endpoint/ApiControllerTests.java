@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith( SpringRunner.class )
-@WebMvcTest( ApiController.class )
+@WebMvcTest( value = ApiController.class, secure = false )
 @AutoConfigureRestDocs( outputDir = "build/generated-snippets", uriPort = 8765 )
 public class ApiControllerTests {
 

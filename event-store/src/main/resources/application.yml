@@ -7,6 +7,10 @@ management.endpoints.web.expose: health, info, env, metrics
 
 server:
   port: ${PORT:9082}
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
 
 spring:
   h2:
@@ -26,3 +30,15 @@ spring:
           contentType: application/json
           producer:
             headerMode: raw # Outbound data has no embedded headers
+
+---
+spring:
+  profiles: cloud
+
+  h2:
+    console:
+      enabled: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update

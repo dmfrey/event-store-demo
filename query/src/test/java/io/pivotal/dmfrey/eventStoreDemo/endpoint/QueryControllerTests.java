@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith( SpringRunner.class )
-@WebMvcTest( QueryController.class )
+@WebMvcTest( value = QueryController.class, secure = false )
 public class QueryControllerTests {
 
     @Autowired

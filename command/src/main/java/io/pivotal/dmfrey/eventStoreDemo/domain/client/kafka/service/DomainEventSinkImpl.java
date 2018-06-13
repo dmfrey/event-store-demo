@@ -24,7 +24,7 @@ import static io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaC
 @Profile( "kafka" )
 @EnableBinding( BoardEventsStreamsProcessor.class )
 @Slf4j
-public class DomainEventSinkImpl /* implements DomainEventSink */ {
+public class DomainEventSinkImpl implements DomainEventSink {
 
     private final ObjectMapper mapper;
     private final Serde<DomainEvent> domainEventSerde;

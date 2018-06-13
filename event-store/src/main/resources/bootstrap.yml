@@ -1,3 +1,11 @@
 spring:
   application:
-    name: event-store
+    name: esd-event-store
+
+---
+spring:
+  profiles: cloud
+
+  cloud:
+    services:
+      registrationMethod: direct

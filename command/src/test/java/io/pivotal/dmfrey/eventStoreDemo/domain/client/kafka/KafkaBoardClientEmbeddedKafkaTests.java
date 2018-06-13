@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 @Slf4j
+//@Ignore
 public class KafkaBoardClientEmbeddedKafkaTests {
 
     private static String RECEIVER_TOPIC = "board-events";
@@ -73,6 +74,7 @@ public class KafkaBoardClientEmbeddedKafkaTests {
                 "--spring.cloud.service-registry.auto-registration.enabled=false",
                 "--spring.jmx.enabled=false",
                 "--spring.cloud.stream.bindings.input.destination=board-events",
+                "--spring.cloud.stream.bindings.output.binder=kafka",
                 "--spring.cloud.stream.bindings.output.destination=board-events",
                 "--spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms=1000",
                 "--spring.cloud.stream.bindings.output.producer.headerMode=raw",

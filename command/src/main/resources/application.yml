@@ -5,6 +5,10 @@ logger.level:
 
 server:
   port: ${PORT:9080}
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
 
 spring:
   jackson:
@@ -16,11 +20,11 @@ spring:
 spring:
   profiles: event-store
 
-spring:
   cloud:
     stream:
       bindings:
         input:
+          binder: rabbitmq
           destination: board-events
           group: command-board-events-group
           consumer:
@@ -36,7 +40,6 @@ spring:
 spring:
   profiles: kafka
 
-spring:
   cloud:
     stream:
       bindings:
@@ -48,6 +51,7 @@ spring:
             headerMode: raw # Outbound data has no embedded headers
         input:
           destination: board-events
+          contentType: application/json
           group: command-board-events-group
           consumer:
             useNativeDecoding: true

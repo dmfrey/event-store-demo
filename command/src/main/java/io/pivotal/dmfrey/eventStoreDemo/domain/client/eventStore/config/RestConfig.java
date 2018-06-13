@@ -19,7 +19,7 @@ import java.util.UUID;
 @EnableFeignClients
 public class RestConfig {
 
-    @FeignClient( value = "event-store" /*, fallback = HystrixFallbackEventStoreClient.class */ )
+    @FeignClient( value = "esd-event-store" /*, fallback = HystrixFallbackEventStoreClient.class */ )
     public interface EventStoreClient {
 
         @PostMapping( path = "/" )

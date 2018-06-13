@@ -13,7 +13,7 @@ import java.util.UUID;
 @EnableFeignClients
 public class RestConfig {
 
-    @FeignClient( value = "command" )
+    @FeignClient( value = "esd-command" )
     public interface CommandClient {
 
         @PostMapping( path = "/boards/" )
@@ -33,7 +33,7 @@ public class RestConfig {
 
     }
 
-    @FeignClient( value = "query" )
+    @FeignClient( value = "esd-query" )
     public interface QueryClient {
 
         @GetMapping( path = "/boards/{boardUuid}" )

@@ -1,3 +1,11 @@
 spring:
   application:
-    name: command
+    name: esd-command
+
+---
+spring:
+  profiles: cloud
+
+  cloud:
+    services:
+      registrationMethod: direct

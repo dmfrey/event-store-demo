@@ -6,6 +6,10 @@ logger.level:
 
 server:
   port: ${PORT:9081}
+  use-forward-headers: true
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
 
 spring:
   jackson:
@@ -30,7 +34,6 @@ spring:
 spring:
   profiles: kafka
 
-spring:
   cloud:
     stream:
       bindings:

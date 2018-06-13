@@ -11,17 +11,17 @@ dependencies {
     // Spring Cloud dependencies
     compile('org.springframework.cloud:spring-cloud-starter-openfeign')
     compile('org.springframework.cloud:spring-cloud-stream-binder-rabbit')
-    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka:2.0.0.RC2')
-    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka-core:2.0.0.RC2')
-    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:2.0.0.RC2')
+    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka')
+    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka-core')
+    compile('org.springframework.cloud:spring-cloud-stream-binder-kafka-streams')
 
 
     // Third-party dependencies
 
 
     // Test dependencies
-    testCompile('org.springframework.cloud:spring-cloud-stream-binder-test:2.0.0.RC2')
     testCompile('org.springframework.kafka:spring-kafka-test')
+    testCompile('org.springframework.cloud:spring-cloud-stream-binder-test')
 
 }
 
