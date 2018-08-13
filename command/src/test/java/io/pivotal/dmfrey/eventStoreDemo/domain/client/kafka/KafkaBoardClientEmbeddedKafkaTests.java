@@ -35,22 +35,34 @@ public class KafkaBoardClientEmbeddedKafkaTests {
 
     private static String RECEIVER_TOPIC = "board-events";
 
+    private static final String KAFKA_BROKERS_PROPERTY = "spring.kafka.bootstrap-servers";
+
     @ClassRule
-    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded( 1, true, RECEIVER_TOPIC, BOARD_EVENTS_SNAPSHOTS );
+    public static KafkaEmbedded kafkaEmbedded = new KafkaEmbedded( 1, true, RECEIVER_TOPIC, BOARD_EVENTS_SNAPSHOTS );
+
+    @BeforeClass
+    public static void setup() {
+        System.setProperty( KAFKA_BROKERS_PROPERTY, kafkaEmbedded.getBrokersAsString() );
+    }
+
+    @AfterClass
+    public static void clean() {
+        System.clearProperty( KAFKA_BROKERS_PROPERTY );
+    }
 
     private static Consumer<String, String> consumer;
 
     @BeforeClass
     public static void setUp() throws Exception {
 
-        Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("command-board-events-group", "false", embeddedKafka );
+        Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("command-board-events-group", "false", kafkaEmbedded);
         consumerProps.put( ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest" );
 
         DefaultKafkaConsumerFactory<String, String> cf = new DefaultKafkaConsumerFactory<>( consumerProps );
 
         consumer = cf.createConsumer();
 
-        embeddedKafka.consumeFromAnEmbeddedTopic( consumer, RECEIVER_TOPIC );
+        kafkaEmbedded.consumeFromAnEmbeddedTopic( consumer, RECEIVER_TOPIC );
 
 
     }
@@ -65,8 +77,8 @@ public class KafkaBoardClientEmbeddedKafkaTests {
     @Test
     public void testFind() throws Exception {
 
-        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.brokers=" + embeddedKafka.getBrokersAsString() );
-        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.zkNodes=" + embeddedKafka.getZookeeperConnectionString() );
+        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.brokers=" + kafkaEmbedded.getBrokersAsString() );
+        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.zkNodes=" + kafkaEmbedded.getZookeeperConnectionString() );
 
         SpringApplication app = new SpringApplication( Application.class );
         app.setWebApplicationType( WebApplicationType.NONE );
@@ -79,8 +91,8 @@ public class KafkaBoardClientEmbeddedKafkaTests {
                 "--spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms=1000",
                 "--spring.cloud.stream.bindings.output.producer.headerMode=raw",
                 "--spring.cloud.stream.bindings.input.consumer.headerMode=raw",
-                "--spring.cloud.stream.kafka.streams.binder.brokers=" + embeddedKafka.getBrokersAsString(),
-                "--spring.cloud.stream.kafka.streams.binder.zkNodes=" + embeddedKafka.getZookeeperConnectionString(),
+                "--spring.cloud.stream.kafka.streams.binder.brokers=" + kafkaEmbedded.getBrokersAsString(),
+                "--spring.cloud.stream.kafka.streams.binder.zkNodes=" + kafkaEmbedded.getZookeeperConnectionString(),
                 "--spring.profiles.active=kafka",
                 "--spring.jackson.serialization.write_dates_as_timestamps=false",
                 "--logger.level.io.pivotal.dmfrey=DEBUG");
@@ -98,7 +110,7 @@ public class KafkaBoardClientEmbeddedKafkaTests {
 
     private void receiveAndValidateBoard( ConfigurableApplicationContext context ) throws Exception {
 
-        Map<String, Object> senderProps = KafkaTestUtils.producerProps( embeddedKafka );
+        Map<String, Object> senderProps = KafkaTestUtils.producerProps(kafkaEmbedded);
         DefaultKafkaProducerFactory<String, String> pf = new DefaultKafkaProducerFactory<>( senderProps );
         KafkaTemplate<String, String> template = new KafkaTemplate<>( pf, true );
         template.setDefaultTopic( RECEIVER_TOPIC );
