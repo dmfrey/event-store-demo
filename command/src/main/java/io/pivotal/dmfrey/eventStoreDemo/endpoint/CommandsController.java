@@ -1,6 +1,7 @@
 package io.pivotal.dmfrey.eventStoreDemo.endpoint;
 
 import io.pivotal.dmfrey.eventStoreDemo.domain.service.BoardService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping( "/boards" )
+@Slf4j
 public class CommandsController {
 
     private final BoardService service;
@@ -21,6 +23,7 @@ public class CommandsController {
 
     @PostMapping( "/" )
     public ResponseEntity createBoard( final UriComponentsBuilder uriComponentsBuilder ) {
+        log.debug( "createBoard : enter" );
 
         UUID boardUuid = this.service.createBoard();
 
@@ -31,6 +34,7 @@ public class CommandsController {
 
     @PatchMapping( "/{boardUuid}" )
     public ResponseEntity renameBoard( @PathVariable( "boardUuid" ) UUID boardUuid, @RequestParam( "name" ) String name, final UriComponentsBuilder uriComponentsBuilder ) {
+        log.debug( "renameBoard : enter" );
 
         this.service.renameBoard( boardUuid, name );
 
@@ -41,6 +45,7 @@ public class CommandsController {
 
     @PostMapping( "/{boardUuid}/stories" )
     public ResponseEntity addStoryToBoard( @PathVariable( "boardUuid" ) UUID boardUuid, @RequestParam( "name" ) String name, final UriComponentsBuilder uriComponentsBuilder ) {
+        log.debug( "addStoryToBoard : enter" );
 
         UUID storyUuid = this.service.addStory( boardUuid, name );
 
@@ -51,6 +56,7 @@ public class CommandsController {
 
     @PutMapping( "/{boardUuid}/stories/{storyUuid}" )
     public ResponseEntity updateStoryOnBoard( @PathVariable( "boardUuid" ) UUID boardUuid, @PathVariable( "storyUuid" ) UUID storyUuid, @RequestParam( "name" ) String name ) {
+        log.debug( "updateStoryOnBoard : enter" );
 
         this.service.updateStory( boardUuid, storyUuid, name );
 
@@ -61,6 +67,7 @@ public class CommandsController {
 
     @DeleteMapping( "/{boardUuid}/stories/{storyUuid}" )
     public ResponseEntity removeStoryFromBoard( @PathVariable( "boardUuid" ) UUID boardUuid, @PathVariable( "storyUuid" ) UUID storyUuid ) {
+        log.debug( "removeStoryFromBoard : enter" );
 
         this.service.deleteStory( boardUuid, storyUuid );
 
