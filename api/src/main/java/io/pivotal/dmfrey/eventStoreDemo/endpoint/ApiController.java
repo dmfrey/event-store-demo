@@ -30,7 +30,7 @@ public class ApiController {
     }
 
     @GetMapping( path = "/{boardUuid}" )
-    public ResponseEntity<Board> board(@PathVariable( "boardUuid" ) UUID boardUuid ) {
+    public ResponseEntity<Board> board( @PathVariable( "boardUuid" ) UUID boardUuid ) {
         log.info( "board : enter" );
 
         ResponseEntity<Board> responseEntity = this.service.board( boardUuid );

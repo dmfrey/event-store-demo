@@ -4,7 +4,6 @@ import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.config.KafkaClientConfig;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.kafka.service.DomainEventSourceImpl;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -36,7 +35,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 )
 @ActiveProfiles( "kafka" )
 @DirtiesContext
-@Slf4j
 //@Ignore
 public class KafkaBoardClientTests {
 

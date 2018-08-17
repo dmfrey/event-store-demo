@@ -25,3 +25,9 @@ dependencies {
 
 }
 
+contracts {
+
+    basePackageForTests = 'io.pivotal.dmfrey.eventStoreDemo'
+    packageWithBaseClasses = 'io.pivotal.dmfrey.eventStoreDemo.contracts'
+
+}

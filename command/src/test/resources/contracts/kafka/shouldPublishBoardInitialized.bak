@@ -1,0 +1,24 @@
+//package kafka
+//
+//org.springframework.cloud.contract.spec.Contract.make {
+//
+//  label 'publish_board_initialised'
+//
+//  input {
+//
+//    triggeredBy( 'publishBoardInitialized()' )
+//
+//  }
+//
+//  outputMessage {
+//
+//    sentTo( 'board-events' )
+//
+//    body {'''
+//      "eventType": "BoardInitialized",
+//      "boardUuid": "11111111-90ab-cdef-1234-567890abcdef",
+//      "occurredOn" "2018-08-16T16:45:32.123Z"
+//    '''}
+//  }
+//
+//}

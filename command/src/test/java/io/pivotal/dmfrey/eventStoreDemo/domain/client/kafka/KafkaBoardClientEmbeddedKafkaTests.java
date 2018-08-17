@@ -5,7 +5,6 @@ import io.pivotal.dmfrey.eventStoreDemo.Application;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.BoardInitialized;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.junit.*;
@@ -29,7 +28,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-@Slf4j
 //@Ignore
 public class KafkaBoardClientEmbeddedKafkaTests {
 
@@ -77,8 +75,8 @@ public class KafkaBoardClientEmbeddedKafkaTests {
     @Test
     public void testFind() throws Exception {
 
-        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.brokers=" + kafkaEmbedded.getBrokersAsString() );
-        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.zkNodes=" + kafkaEmbedded.getZookeeperConnectionString() );
+//        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.brokers=" + kafkaEmbedded.getBrokersAsString() );
+//        log.debug( "testFind : --spring.cloud.stream.kafka.streams.binder.zkNodes=" + kafkaEmbedded.getZookeeperConnectionString() );
 
         SpringApplication app = new SpringApplication( Application.class );
         app.setWebApplicationType( WebApplicationType.NONE );
