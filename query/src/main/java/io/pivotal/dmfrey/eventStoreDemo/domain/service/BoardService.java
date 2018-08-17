@@ -1,10 +1,9 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
 import io.pivotal.dmfrey.eventStoreDemo.domain.model.Board;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.util.UUID;
 
@@ -20,6 +19,7 @@ public class BoardService {
     }
 
 //    @Cacheable( "boards" )
+    @HystrixCommand
     public Board find( final UUID boardUuid ) {
         log.debug( "find : enter" );
 
@@ -31,6 +31,7 @@ public class BoardService {
     }
 
 //    @CacheEvict( value = "boards", key = "#boardUuid" )
+    @HystrixCommand
     public void uncacheTarget( final UUID boardUuid ) {
         log.debug( "uncacheTarget : enter" );
 

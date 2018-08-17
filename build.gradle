@@ -62,6 +62,9 @@ subprojects {
         compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
         compile('io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry')
 
+        compile('org.springframework.cloud:spring-cloud-starter-netflix-hystrix')
+        compile('io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker')
+
         compile('org.springframework.cloud:spring-cloud-starter-sleuth')
 
         // Third-party dependencies

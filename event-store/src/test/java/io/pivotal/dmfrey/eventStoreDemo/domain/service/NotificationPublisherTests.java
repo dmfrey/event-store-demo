@@ -16,10 +16,12 @@ import java.util.concurrent.BlockingQueue;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 import static org.springframework.cloud.stream.test.matcher.MessageQueueMatcher.receivesPayloadThat;
 
 @RunWith( SpringRunner.class )
 @SpringBootTest(
+        webEnvironment = NONE,
         properties = {
                 "--spring.cloud.service-registry.auto-registration.enabled=false"
         }

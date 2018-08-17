@@ -1,5 +1,6 @@
 package io.pivotal.dmfrey.eventStoreDemo.domain.client.eventStore.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.BoardClient;
 import io.pivotal.dmfrey.eventStoreDemo.domain.client.eventStore.config.RestConfig;
 import io.pivotal.dmfrey.eventStoreDemo.domain.events.DomainEvents;
@@ -24,6 +25,7 @@ public class EventStoreBoardClient implements BoardClient {
     }
 
     @Override
+    @HystrixCommand
     public void save( final Board board ) {
         log.debug( "save : enter" );
 
@@ -44,6 +46,7 @@ public class EventStoreBoardClient implements BoardClient {
     }
 
     @Override
+    @HystrixCommand
     public Board find( final UUID boardUuid ) {
         log.debug( "find : enter" );
 
